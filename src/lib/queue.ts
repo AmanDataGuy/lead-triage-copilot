@@ -38,8 +38,10 @@ export function slaStatus(lead: QueueLead, now: Date): Sla | null {
 export type QueueItem<T> = { lead: T; bucket: "overdue" | "follow_up_due" | "new" | "scheduled"; sla: Sla | null };
 
 const BUCKET_ORDER = { overdue: 0, follow_up_due: 1, new: 2, scheduled: 3 } as const;
+const TIER_ORDER: Record<Tier, number> = { hot: 0, warm: 1, cold: 2, junk: 3 };
 
-// Order the day's calls: overdue new leads first, then follow-ups that are due, then other new leads, then the rest.
+// Order the day's calls: hotter leads first; inside a tier, overdue new leads, then due follow-ups, then fresh
+// leads, by score. Follow-ups scheduled for later always go to the bottom.
 export function orderQueue<T extends QueueLead>(leads: T[], now: Date): QueueItem<T>[] {
   return leads
     .filter((l) => l.status === "ready" && l.tier !== "junk" && l.stage !== "closed_lost")
@@ -50,6 +52,10 @@ export function orderQueue<T extends QueueLead>(leads: T[], now: Date): QueueIte
       return { lead, sla, bucket: due ? "follow_up_due" : "scheduled" };
     })
     .sort((a, b) => {
+      const later = Number(a.bucket === "scheduled") - Number(b.bucket === "scheduled");
+      if (later) return later;
+      const byTier = TIER_ORDER[a.lead.tier ?? "junk"] - TIER_ORDER[b.lead.tier ?? "junk"];
+      if (byTier) return byTier;
       const byBucket = BUCKET_ORDER[a.bucket] - BUCKET_ORDER[b.bucket];
       if (byBucket) return byBucket;
       if (a.bucket === "follow_up_due" || a.bucket === "scheduled") {
