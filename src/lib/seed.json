@@ -1,0 +1,634 @@
+[
+  {
+    "minutesAgo": 3,
+    "lead": {
+      "name": "Rohit Verma",
+      "phone": "+91 98450 12345",
+      "location": "Whitefield, Bengaluru",
+      "requirement": "2BHK, east-facing, ready to move",
+      "budget": "₹80-90 lakh",
+      "timeline": "Within 1 month",
+      "message": "Hi, mera rent agreement 31 March ko khatam ho raha hai so jaldi shift karna hai. SBI se 70L loan pre-approved hai. Whitefield mein 2BHK east facing chahiye, ready to move. Kya is Saturday site visit ho sakta hai? Wife bhi aayegi. Price sheet WhatsApp kar do pls."
+    },
+    "analysis": {
+      "category": "buyer",
+      "inputQuality": "ok",
+      "summary": "Rohit Verma wants a 2BHK east-facing ready-to-move flat in Whitefield with a budget of 80-90 lakhs. SBI loan 70L pre-approved. Wants site visit this Saturday.",
+      "intent": {
+        "type": "self_use",
+        "explanation": "He needs to shift quickly because his rent agreement is ending."
+      },
+      "keyRequirements": [
+        "2BHK",
+        "East-facing",
+        "Ready to move",
+        "Whitefield Bengaluru"
+      ],
+      "objections": [
+        {
+          "concern": "Need to shift before rent agreement ends on 31 March",
+          "severity": "minor",
+          "handling": "Confirm availability of ready-to-move inventory for quick possession."
+        }
+      ],
+      "contradictions": [],
+      "missingInfo": [
+        "Preferred carpet area in square feet?"
+      ],
+      "signals": {
+        "timeline": {
+          "level": "under_1_month",
+          "evidence": "rent agreement 31 March ko khatam ho raha hai"
+        },
+        "budget": {
+          "level": "clear_realistic",
+          "evidence": "₹80-90 lakh"
+        },
+        "intent": {
+          "level": "ready_to_act",
+          "evidence": "Kya is Saturday site visit ho sakta hai?"
+        },
+        "specificity": {
+          "level": "specific",
+          "evidence": "2BHK, east-facing, ready to move"
+        },
+        "financing": {
+          "level": "ready",
+          "evidence": "SBI se 70L loan pre-approved hai"
+        },
+        "decisionMaker": {
+          "level": "confirmed",
+          "evidence": "Wife bhi aayegi"
+        }
+      },
+      "nextAction": {
+        "action": "book_site_visit",
+        "when": "today",
+        "detail": "Call Rohit today to confirm Saturday site visit time and share price sheet on WhatsApp."
+      },
+      "callBrief": {
+        "opener": "Hi Rohit, I received your request for a ready-to-move 2BHK in Whitefield. Can we confirm the site visit for this Saturday with your wife?",
+        "emphasize": [
+          "Ready to move inventory",
+          "East-facing availability",
+          "Quick documentation support"
+        ],
+        "objectionReply": "We have ready-to-move options that can be processed quickly to meet your March deadline."
+      },
+      "suggestedResponse": "Hi Rohit, thanks for reaching out. Main aapko WhatsApp par price sheet bhej raha hoon. Saturday ko aapki wife ke saath site visit plan karte hain. Kya time theek rahega aapke liye?",
+      "language": "hinglish"
+    },
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "minutesAgo": 40,
+    "lead": {
+      "name": "Priya Nair",
+      "phone": "+91 99001 23456",
+      "location": "Sarjapur Road, Bengaluru",
+      "requirement": "3BHK, 1500+ sq ft, good school nearby",
+      "budget": "₹1.4-1.6 Cr",
+      "timeline": "1-3 months",
+      "message": "We're relocating from Chennai, my husband joins a company on Sarjapur Road on 15 Jan. Need a 3BHK ready or near-ready; the kids' school admission is in Feb so we need to close soon. About 40% will come from selling our Chennai flat, the rest a home loan. Can you share availability on higher floors and the all-inclusive cost? We can visit next weekend."
+    },
+    "analysis": {
+      "category": "buyer",
+      "inputQuality": "ok",
+      "summary": "Priya Nair is relocating from Chennai and needs a ready 3BHK on Sarjapur Road within 1.4-1.6 Cr by Feb for school admissions.",
+      "intent": {
+        "type": "self_use",
+        "explanation": "Relocating family needs a home near the husband's workplace and schools."
+      },
+      "keyRequirements": [
+        "3BHK",
+        "1500+ sq ft",
+        "Sarjapur Road",
+        "Ready or near-ready",
+        "Good school nearby"
+      ],
+      "objections": [
+        {
+          "concern": "Relies on selling Chennai flat for 40% funds before buying",
+          "severity": "major",
+          "handling": "Discuss timelines for the Chennai property sale and explore bridging loan options if needed."
+        }
+      ],
+      "contradictions": [],
+      "missingInfo": [
+        "What is the exact status of the Chennai flat sale?"
+      ],
+      "signals": {
+        "timeline": {
+          "level": "1_3_months",
+          "evidence": "kids' school admission is in Feb so we need to close soon"
+        },
+        "budget": {
+          "level": "clear_realistic",
+          "evidence": "1.4-1.6 Cr"
+        },
+        "intent": {
+          "level": "ready_to_act",
+          "evidence": "We can visit next weekend."
+        },
+        "specificity": {
+          "level": "specific",
+          "evidence": "3BHK, 1500+ sq ft, good school nearby"
+        },
+        "financing": {
+          "level": "planned",
+          "evidence": "40% will come from selling our Chennai flat, the rest a home loan"
+        },
+        "decisionMaker": {
+          "level": "needs_approval",
+          "evidence": "my husband joins a company"
+        }
+      },
+      "nextAction": {
+        "action": "book_site_visit",
+        "when": "today",
+        "detail": "Call Priya to confirm a site visit for next weekend."
+      },
+      "callBrief": {
+        "opener": "Hi Priya, welcome to Bengaluru. I understand you are relocating from Chennai and looking for a 3BHK near Sarjapur Road by February.",
+        "emphasize": [
+          "Ready to move configuration",
+          "Proximity to schools",
+          "Higher floor availability"
+        ],
+        "objectionReply": "We can share available inventory and discuss payment milestones aligned with your Chennai property sale."
+      },
+      "suggestedResponse": "Hi Priya, thank you for reaching out. We would be happy to show you available 3BHK units on higher floors along Sarjapur Road next weekend. Could we schedule a brief call today to understand your preferred timings for the site visit?",
+      "language": "english"
+    },
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "minutesAgo": 180,
+    "lead": {
+      "name": "Lakshmi Subramanian",
+      "phone": "+91 97400 55667",
+      "location": "Devanahalli, near Bengaluru airport",
+      "requirement": "3BHK villa, ready to move",
+      "budget": "₹1.2 Cr (can stretch to 1.25)",
+      "timeline": "Immediately",
+      "message": "My colleague Ramesh bought in your Phase 1. We saw the villa at plot 34 last Sunday and liked it. Funds are ready (FD maturing plus HDFC loan sanctioned). Only issue: you quoted 1.32 Cr all-inclusive. If you can come to 1.22 with car parking included, I can pay the token this Friday. Please confirm with your manager."
+    },
+    "analysis": {
+      "category": "buyer",
+      "inputQuality": "ok",
+      "summary": "Lakshmi liked plot 34 villa last Sunday. Funds are ready via FD and sanctioned HDFC loan. Ready to book this Friday if price is 1.22 Cr.",
+      "intent": {
+        "type": "self_use",
+        "explanation": "Wants to buy a ready-to-move villa for self-use."
+      },
+      "keyRequirements": [
+        "3BHK villa",
+        "Ready to move",
+        "Devanahalli near airport"
+      ],
+      "objections": [
+        {
+          "concern": "Quoted price of 1.32 Cr is higher than budget of 1.25 Cr",
+          "severity": "major",
+          "handling": "Check with management regarding the offered 1.22 Cr price and car parking inclusion."
+        }
+      ],
+      "contradictions": [
+        "Verify budget: form states 1.25 Cr max stretch, but message asks for 1.22 Cr with quote at 1.32 Cr."
+      ],
+      "missingInfo": [
+        "Confirm manager approval on the 1.22 Cr pricing request."
+      ],
+      "signals": {
+        "timeline": {
+          "level": "under_1_month",
+          "evidence": "token this Friday"
+        },
+        "budget": {
+          "level": "stretch",
+          "evidence": "can stretch to 1.25"
+        },
+        "intent": {
+          "level": "ready_to_act",
+          "evidence": "pay the token this Friday"
+        },
+        "specificity": {
+          "level": "specific",
+          "evidence": "villa at plot 34"
+        },
+        "financing": {
+          "level": "ready",
+          "evidence": "FD maturing plus HDFC loan sanctioned"
+        },
+        "decisionMaker": {
+          "level": "confirmed",
+          "evidence": "not stated"
+        }
+      },
+      "nextAction": {
+        "action": "call_now",
+        "when": "today",
+        "detail": "Call Lakshmi to discuss the price negotiation and token payment for plot 34."
+      },
+      "callBrief": {
+        "opener": "Hi Lakshmi, thanks for visiting plot 34 last Sunday. I'm calling to discuss your offer and the token payment for this Friday.",
+        "emphasize": [
+          "Phase 1 quality",
+          "Ready to move status",
+          "HDFC loan support"
+        ],
+        "objectionReply": "I will consult my manager regarding your price request and get back to you immediately."
+      },
+      "suggestedResponse": "Hi Lakshmi, thanks for visiting plot 34 last Sunday with your colleague Ramesh. I am discussing your offer of 1.22 Cr including car parking with my manager and will update you shortly so you can plan the token payment this Friday.",
+      "language": "english"
+    },
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "minutesAgo": 1560,
+    "lead": {
+      "name": "Arjun Mehta (NRI, Dubai)",
+      "phone": "",
+      "location": "Hebbal, Bengaluru",
+      "requirement": "2BHK for investment / rental income",
+      "budget": "₹90 lakh - 1 Cr",
+      "timeline": "3-6 months",
+      "message": "Looking for an investment 2BHK near Manyata Tech Park. What's the expected rental yield and the RERA registration number? I'm based in Dubai; my father in Bengaluru can do the site visit. Is an NRI home loan possible with your partner banks?"
+    },
+    "analysis": {
+      "category": "buyer",
+      "inputQuality": "ok",
+      "summary": "Arjun Mehta, an NRI based in Dubai, wants a 2BHK near Manyata Tech Park, Bengaluru, for investment with a budget of Rs 90 lakh to 1 Cr.",
+      "intent": {
+        "type": "investment",
+        "explanation": "Customer explicitly stated looking for an investment 2BHK for rental income."
+      },
+      "keyRequirements": [
+        "2BHK",
+        "Near Manyata Tech Park",
+        "Investment / rental income",
+        "NRI home loan"
+      ],
+      "objections": [
+        {
+          "concern": "Needs details on NRI home loans with partner banks",
+          "severity": "minor",
+          "handling": "Confirm that partner banks support NRI home loans and share the documentation checklist."
+        }
+      ],
+      "contradictions": [],
+      "missingInfo": [
+        "Which specific project configurations or floor plans are preferred?"
+      ],
+      "signals": {
+        "timeline": {
+          "level": "3_6_months",
+          "evidence": "3-6 months"
+        },
+        "budget": {
+          "level": "clear_realistic",
+          "evidence": "₹90 lakh - 1 Cr"
+        },
+        "intent": {
+          "level": "specific_questions",
+          "evidence": "What's the expected rental yield and the RERA registration number?"
+        },
+        "specificity": {
+          "level": "specific",
+          "evidence": "2BHK near Manyata Tech Park"
+        },
+        "financing": {
+          "level": "planned",
+          "evidence": "Is an NRI home loan possible"
+        },
+        "decisionMaker": {
+          "level": "needs_approval",
+          "evidence": "my father in Bengaluru can do the site visit"
+        }
+      },
+      "nextAction": {
+        "action": "call_now",
+        "when": "today",
+        "detail": "Call Arjun or coordinate with his father in Bengaluru to schedule a site visit."
+      },
+      "callBrief": {
+        "opener": "Hello Arjun, thanks for your inquiry regarding investment options near Manyata Tech Park. I understand you are calling from Dubai.",
+        "emphasize": [
+          "Rental yield and past appreciation",
+          "RERA compliance and details",
+          "NRI home loan assistance"
+        ],
+        "objectionReply": "We have tie-ups with leading banks for seamless NRI home loan processing and can share the complete list."
+      },
+      "suggestedResponse": "Hi Arjun, thank you for your interest. We certainly have 2BHK options near Manyata Tech Park suited for rental investment, with complete RERA details available. We also facilitate NRI home loans through our partner banks. Since you are in Dubai, we can coordinate a site visit with your father in Bengaluru at his convenience. Shall we schedule it this week?",
+      "language": "english"
+    },
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "minutesAgo": 300,
+    "lead": {
+      "name": "Sandeep Arora",
+      "phone": "+91 98860 77889",
+      "location": "Thanisandra, Bengaluru",
+      "requirement": "3BHK + study, gated society",
+      "budget": "₹1.8-2 Cr",
+      "timeline": "1-3 months",
+      "message": "Lead: possession date kya hai is project ka?\nAgent: RERA possession Dec 2028 hai sir.\nLead: 2028?? bahut late hai. pichle builder ne 3 saal delay kiya tha, ab trust nahi hota\nLead: koi ready to move option hai same budget mein?\nLead: aur wife ko bhi dikhana padega, weekend pe hi aa sakte hain"
+    },
+    "analysis": {
+      "category": "buyer",
+      "inputQuality": "ok",
+      "summary": "Sandeep wants a 3BHK plus study in Thanisandra within ₹1.8-2 Cr for self use, but is worried about possession delays.",
+      "intent": {
+        "type": "self_use",
+        "explanation": "Looking to buy a home for his family."
+      },
+      "keyRequirements": [
+        "3BHK plus study",
+        "Gated society",
+        "Thanisandra, Bengaluru"
+      ],
+      "objections": [
+        {
+          "concern": "Possession date in 2028 is too late due to past bad builder experience",
+          "severity": "major",
+          "handling": "Acknowledge past delay concern and offer ready to move options."
+        }
+      ],
+      "contradictions": [],
+      "missingInfo": [
+        "Are you open to slightly earlier construction milestones or strictly ready-to-move?"
+      ],
+      "signals": {
+        "timeline": {
+          "level": "1_3_months",
+          "evidence": "1-3 months"
+        },
+        "budget": {
+          "level": "clear_realistic",
+          "evidence": "₹1.8-2 Cr"
+        },
+        "intent": {
+          "level": "specific_questions",
+          "evidence": "possession date kya hai is project ka?"
+        },
+        "specificity": {
+          "level": "specific",
+          "evidence": "3BHK + study, gated society"
+        },
+        "financing": {
+          "level": "unknown",
+          "evidence": "not stated"
+        },
+        "decisionMaker": {
+          "level": "needs_approval",
+          "evidence": "wife ko bhi dikhana padega"
+        }
+      },
+      "nextAction": {
+        "action": "book_site_visit",
+        "when": "this_week",
+        "detail": "Call Sandeep to schedule a weekend site visit for him and his wife to see ready options."
+      },
+      "callBrief": {
+        "opener": "Hi Sandeep, I understand you are concerned about the 2028 possession date. Let's discuss ready-to-move options within your budget.",
+        "emphasize": [
+          "Ready to move options",
+          "Thanisandra location",
+          "Gated society amenities"
+        ],
+        "objectionReply": "We completely understand your trust concerns regarding timelines; let me share ready options for a weekend visit."
+      },
+      "suggestedResponse": "Hi Sandeep ji. 2028 possession wala project aapke liye late ho jayega, yeh samajh sakta hu. Hamare paas same budget me kuch ready-to-move options bhi hain Thanisandra me. Kya aap aur aapki wife is weekend site visit ke liye aa sakte hain?",
+      "language": "hinglish"
+    },
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "minutesAgo": 2880,
+    "lead": {
+      "name": "Vikram Reddy",
+      "phone": "",
+      "location": "Hyderabad, anywhere good",
+      "requirement": "Flat",
+      "budget": "Not sure",
+      "timeline": "Just exploring",
+      "message": "Just checking prices. Abhi plan nahi hai, maybe next year. Send brochure."
+    },
+    "analysis": {
+      "category": "buyer",
+      "inputQuality": "ok",
+      "summary": "Vikram is browsing for a flat in Hyderabad with no immediate buying plans, targeting next year.",
+      "intent": {
+        "type": "browsing",
+        "explanation": "Customer explicitly stated they are just checking prices and have no current buying plan."
+      },
+      "keyRequirements": [
+        "Flat",
+        "Hyderabad"
+      ],
+      "objections": [],
+      "contradictions": [],
+      "missingInfo": [
+        "What BHK configuration are you looking for?",
+        "Do you have a preferred area in Hyderabad?"
+      ],
+      "signals": {
+        "timeline": {
+          "level": "over_6_months",
+          "evidence": "maybe next year"
+        },
+        "budget": {
+          "level": "unknown",
+          "evidence": "Not sure"
+        },
+        "intent": {
+          "level": "generic",
+          "evidence": "Send brochure."
+        },
+        "specificity": {
+          "level": "vague",
+          "evidence": "anywhere good"
+        },
+        "financing": {
+          "level": "unknown",
+          "evidence": "not stated"
+        },
+        "decisionMaker": {
+          "level": "unknown",
+          "evidence": "not stated"
+        }
+      },
+      "nextAction": {
+        "action": "send_details",
+        "when": "today",
+        "detail": "Send the e-brochure and details via WhatsApp."
+      },
+      "callBrief": {
+        "opener": "Hi Vikram, thanks for your interest in our Hyderabad projects. I am sharing the brochure you requested.",
+        "emphasize": [
+          "Project locations in Hyderabad",
+          "Available configurations"
+        ],
+        "objectionReply": "No problem at all, take your time to review the brochure and we can discuss whenever you are ready next year."
+      },
+      "suggestedResponse": "Hi Vikram! Thanks for reaching out. Main abhi aapko WhatsApp par hamara digital brochure bhej raha hoon jismein sabhi details mil jayengi. Aap ise check kijiye, aur agar koi sawaal ho toh batayiye!",
+      "language": "hinglish"
+    },
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "minutesAgo": 1200,
+    "lead": {
+      "name": "Farhan Shaikh",
+      "phone": "",
+      "location": "Bandra West, Mumbai",
+      "requirement": "3BHK sea-facing, new building",
+      "budget": "₹80 lakh",
+      "timeline": "Within 1 month",
+      "message": "Need sea facing 3bhk in Bandra west, max 80 lakh. Ready to move fast if price is right."
+    },
+    "analysis": {
+      "category": "buyer",
+      "inputQuality": "ok",
+      "summary": "Farhan Shaikh is looking for a 3BHK sea-facing flat in Bandra West with a budget of 80 lakh and wants to move within a month.",
+      "intent": {
+        "type": "self_use",
+        "explanation": "Looking to buy a residence for himself."
+      },
+      "keyRequirements": [
+        "3BHK",
+        "Sea-facing",
+        "Bandra West",
+        "New building"
+      ],
+      "objections": [
+        {
+          "concern": "Budget of 80 lakh for a 3BHK sea-facing flat in Bandra West.",
+          "severity": "major",
+          "handling": "Politely discuss available configurations and market reality in Bandra West without quoting specific incorrect prices."
+        }
+      ],
+      "contradictions": [
+        "Verify budget: 80 lakh for a 3BHK sea-facing apartment in Bandra West is extremely unrealistic."
+      ],
+      "missingInfo": [
+        "What is your flexible maximum budget range?",
+        "Are you open to alternative micro-locations nearby?"
+      ],
+      "signals": {
+        "timeline": {
+          "level": "under_1_month",
+          "evidence": "Within 1 month"
+        },
+        "budget": {
+          "level": "likely_unrealistic",
+          "evidence": "max 80 lakh"
+        },
+        "intent": {
+          "level": "ready_to_act",
+          "evidence": "Ready to move fast if price is right."
+        },
+        "specificity": {
+          "level": "specific",
+          "evidence": "3BHK sea-facing, new building"
+        },
+        "financing": {
+          "level": "unknown",
+          "evidence": "not stated"
+        },
+        "decisionMaker": {
+          "level": "unknown",
+          "evidence": "not stated"
+        }
+      },
+      "nextAction": {
+        "action": "clarify_budget",
+        "when": "today",
+        "detail": "Call the customer immediately to discuss budget expectations for Bandra West."
+      },
+      "callBrief": {
+        "opener": "Hi Farhan, thanks for your inquiry for a 3BHK sea-facing flat in Bandra West. I wanted to connect regarding your requirements.",
+        "emphasize": [
+          "Bandra West micro-market trends",
+          "Available inventory matching preferences"
+        ],
+        "objectionReply": "Let us discuss options and configurations that fit your timeline and financial planning closely."
+      },
+      "suggestedResponse": "Hi Farhan, thank you for your interest in a 3BHK sea-facing flat in Bandra West. Given your requirement to move within a month, let us connect over a brief call today to discuss suitable options and your budget expectations. Please let me know a convenient time.",
+      "language": "english"
+    },
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "minutesAgo": 600,
+    "lead": {
+      "name": "test test",
+      "phone": "",
+      "location": "asdf",
+      "requirement": "asdfgh",
+      "budget": "1",
+      "timeline": "Just exploring",
+      "message": "Hello sir we provide SEO and Google ranking services for your real estate website, first page guaranteed. Call us for a free audit."
+    },
+    "analysis": {
+      "category": "not_a_buyer",
+      "inputQuality": "thin",
+      "summary": "Vendor pitch offering SEO services, not a genuine real estate buyer.",
+      "intent": {
+        "type": "unclear",
+        "explanation": "The lead is a service vendor attempting to sell SEO services."
+      },
+      "keyRequirements": [
+        "not stated"
+      ],
+      "objections": [],
+      "contradictions": [],
+      "missingInfo": [
+        "Verify if there is any genuine real estate requirement."
+      ],
+      "signals": {
+        "timeline": {
+          "level": "browsing",
+          "evidence": "Just exploring"
+        },
+        "budget": {
+          "level": "unknown",
+          "evidence": "1"
+        },
+        "intent": {
+          "level": "just_checking",
+          "evidence": "not stated"
+        },
+        "specificity": {
+          "level": "vague",
+          "evidence": "asdfgh"
+        },
+        "financing": {
+          "level": "unknown",
+          "evidence": "not stated"
+        },
+        "decisionMaker": {
+          "level": "unknown",
+          "evidence": "not stated"
+        }
+      },
+      "nextAction": {
+        "action": "disqualify",
+        "when": "now",
+        "detail": "Disqualify lead as it is a vendor pitch for SEO services."
+      },
+      "callBrief": {
+        "opener": "Hello, we are currently not looking for SEO services.",
+        "emphasize": [
+          "Not interested in vendor services"
+        ],
+        "objectionReply": "Please remove us from your calling list."
+      },
+      "suggestedResponse": "Thank you for reaching out, but we are not interested in SEO services at this time.",
+      "language": "english"
+    },
+    "model": "gemini-3.5-flash-lite"
+  }
+]
