@@ -1,0 +1,426 @@
+# golden_leads.yaml - 32 realistic leads, each hand-labelled with the tier a salesperson should give it.
+#
+# Labels were written from the tier definitions below BEFORE running the AI on these leads, and are never edited to
+# match the AI's output. A miss is a finding to investigate, not a label to change.
+#
+#   hot  - a real buyer who can buy within about 3 months, money sorted or clearly arrangeable, asking to act now
+#          (site visit, price sheet, booking, token).
+#   warm - a real buyer, but 3-6 months out or with a big open question (loan unclear, family must agree, a main
+#          objection, still comparing).
+#   cold - browsing, 6+ months away, too vague to act on, a budget that can't buy what they ask, or a real person
+#          with the wrong intent (wants to rent or sell): needs nurturing or re-routing, not a call today.
+#   junk - not a buyer at all: spam, vendor pitches, brokers asking for commission, job seekers, wrong numbers,
+#          gibberish.
+#
+# Used by run_golden.py. All names, numbers and phone details are fictional.
+
+cases:
+  # ---------------------------------------------------------------- HOT (8)
+  - name: rohit-whitefield-rent-ending
+    inputs:
+      name: Rohit Verma
+      location: Whitefield, Bengaluru
+      requirement: 2BHK, east-facing, ready to move
+      budget: ₹80-90 lakh
+      timeline: Within 1 month
+      message: >-
+        Hi, mera rent agreement 31 March ko khatam ho raha hai so jaldi shift karna hai. SBI se 70L loan
+        pre-approved hai. Whitefield mein 2BHK east facing chahiye, ready to move. Kya is Saturday site visit ho
+        sakta hai? Wife bhi aayegi. Price sheet WhatsApp kar do pls.
+    expected_output: hot
+    metadata: {why: Hard deadline, loan pre-approved, asks for a visit and price sheet, decision-maker coming.}
+
+  - name: priya-relocating-school-deadline
+    inputs:
+      name: Priya Nair
+      location: Sarjapur Road, Bengaluru
+      requirement: 3BHK, 1500+ sq ft, good school nearby
+      budget: ₹1.4-1.6 Cr
+      timeline: 1-3 months
+      message: >-
+        We're relocating from Chennai, my husband joins a company on Sarjapur Road on 15 Jan. Need a 3BHK ready or
+        near-ready; the kids' school admission is in Feb so we need to close soon. About 40% will come from selling
+        our Chennai flat, the rest a home loan. Can you share availability on higher floors and the all-inclusive
+        cost? We can visit next weekend.
+    expected_output: hot
+    metadata: {why: Dated deadline, funding planned, asks availability and cost, visit next weekend.}
+
+  - name: lakshmi-token-ready-price-gap
+    inputs:
+      name: Lakshmi Subramanian
+      location: Devanahalli, near Bengaluru airport
+      requirement: 3BHK villa, ready to move
+      budget: ₹1.2 Cr (can stretch to 1.25)
+      timeline: Immediately
+      message: >-
+        My colleague Ramesh bought in your Phase 1. We saw the villa at plot 34 last Sunday and liked it. Funds are
+        ready (FD maturing plus HDFC loan sanctioned). Only issue: you quoted 1.32 Cr all-inclusive. If you can come
+        to 1.22 with car parking included, I can pay the token this Friday. Please confirm with your manager.
+    expected_output: hot
+    metadata: {why: Already visited, funds ready, offers a token this week; the price gap is a negotiation, not a blocker.}
+
+  - name: karthik-electronic-city-visit-tomorrow
+    inputs:
+      name: Karthik Rao
+      location: Electronic City, Bengaluru
+      requirement: 2BHK near Infosys campus, east-facing
+      budget: ₹65-70 lakh
+      timeline: Within 1 month
+      message: >-
+        Saw your ad on 99acres. I have 20L of my own and HDFC has sanctioned a 50L loan. Want to finalise this month.
+        Can I visit tomorrow evening after 6? Prefer east facing, middle floors.
+    expected_output: hot
+    metadata: {why: Funds and loan in place, this month, asks for a visit tomorrow.}
+
+  - name: joshis-sold-old-flat
+    inputs:
+      name: Meera and Arvind Joshi
+      location: Hebbal, Bengaluru
+      requirement: 3BHK ready to move, high floor
+      budget: ₹1.6-1.8 Cr
+      timeline: Immediately
+      message: >-
+        We sold our old flat last month and the money is in the bank. Looking for a ready-to-move 3BHK on a high
+        floor near Hebbal flyover. Both of us can come this Sunday. Please share what is available.
+    expected_output: hot
+    metadata: {why: Cash ready, both deciders, immediate, visit this Sunday.}
+
+  - name: faisal-chat-asks-booking-amount
+    inputs:
+      name: Faisal Khan
+      location: Whitefield, Bengaluru
+      requirement: 2BHK in your Whitefield project
+      budget: ₹95 lakh
+      timeline: 1-3 months
+      message: |-
+        Lead: what is the booking amount for the 2BHK?
+        Agent: Sir it is 5% of the unit value.
+        Lead: ok and RERA number please
+        Agent: Shared on WhatsApp sir.
+        Lead: got it. my loan is approved from Axis. I can pay the token this week if the 9th floor unit is still open
+    expected_output: hot
+    metadata: {why: Asks booking amount and RERA, loan approved, ready to pay a token this week.}
+
+  - name: suresh-yelahanka-hinglish-visit
+    inputs:
+      name: Suresh Gowda
+      location: Yelahanka, Bengaluru
+      requirement: 2BHK, near the metro
+      budget: ₹75 lakh
+      timeline: 1-3 months
+      message: >-
+        Sir SBI se loan approve ho gaya hai, bas location final karna hai. Kal site visit kar sakte hain kya? Wife aur
+        main dono aayenge. Metro ke paas wala tower dikhana please.
+    expected_output: hot
+    metadata: {why: Loan approved, both deciders, asks for a visit tomorrow.}
+
+  - name: neha-noida-chat-ready-this-month
+    inputs:
+      name: Neha Gupta
+      location: Sector 150, Noida
+      requirement: 3BHK, park-facing
+      budget: ₹1.3 Cr
+      timeline: Within 1 month
+      message: |-
+        Lead: is the park facing 3BHK in tower C ready to move?
+        Agent: Yes ma'am, OC received.
+        Lead: great. my funds are ready, selling my mutual funds. can you hold it till Saturday? my husband and I will come at 11
+    expected_output: hot
+    metadata: {why: Ready-to-move unit, funds ready, asks to hold the unit, visit booked with spouse.}
+
+  # ---------------------------------------------------------------- WARM (9)
+  - name: arjun-nri-investor
+    inputs:
+      name: Arjun Mehta (NRI, Dubai)
+      location: Hebbal, Bengaluru
+      requirement: 2BHK for investment / rental income
+      budget: ₹90 lakh - 1 Cr
+      timeline: 3-6 months
+      message: >-
+        Looking for an investment 2BHK near Manyata Tech Park. What's the expected rental yield and the RERA
+        registration number? I'm based in Dubai; my father in Bengaluru can do the site visit. Is an NRI home loan
+        possible with your partner banks?
+    expected_output: warm
+    metadata: {why: Serious but 3-6 months, loan not arranged, deciding from abroad.}
+
+  - name: sandeep-possession-trust
+    inputs:
+      name: Sandeep Arora
+      location: Thanisandra, Bengaluru
+      requirement: 3BHK + study, gated society
+      budget: ₹1.8-2 Cr
+      timeline: 1-3 months
+      message: |-
+        Lead: possession date kya hai is project ka?
+        Agent: RERA possession Dec 2028 hai sir.
+        Lead: 2028?? bahut late hai. pichle builder ne 3 saal delay kiya tha, ab trust nahi hota
+        Lead: koi ready to move option hai same budget mein?
+        Lead: aur wife ko bhi dikhana padega, weekend pe hi aa sakte hain
+    expected_output: warm
+    metadata: {why: Real buyer, but a major trust objection on possession and the wife still has to see it.}
+
+  - name: neha-patil-thane-loan-unsure
+    inputs:
+      name: Neha Patil
+      location: Thane West (Ghodbunder Road), Mumbai
+      requirement: 1BHK, near the station
+      budget: ₹55-60 lakh
+      timeline: 3-6 months
+      message: |-
+        Neha: Hi, 1bhk ka rate kya hai?
+        Agent: Ma'am 1BHK 410 carpet starts at ₹58L all-in. Loan bhi help kar denge.
+        Neha: loan milega kya mujhe? private job hai, 45k salary
+        Neha: husband se discuss karke batati hoon, weekend pe visit kar sakte hain shayad
+        Neha: EMI approx kitni aayegi?
+    expected_output: warm
+    metadata: {why: Interested, but 3-6 months, unsure about the loan, husband not yet involved.}
+
+  - name: anjali-after-bonus
+    inputs:
+      name: Anjali Menon
+      location: Sarjapur Road, Bengaluru
+      requirement: 3BHK
+      budget: ₹1.2 Cr
+      timeline: 3-6 months
+      message: >-
+        Planning to buy after my bonus comes in March. Haven't checked loan eligibility yet. Please share floor
+        plans and the possession date for your Sarjapur project.
+    expected_output: warm
+    metadata: {why: Real intent but timed to a bonus 3-6 months away, loan not checked.}
+
+  - name: rahul-parents-funding
+    inputs:
+      name: Rahul Sharma
+      location: Thanisandra, Bengaluru
+      requirement: 2BHK
+      budget: ₹80 lakh
+      timeline: 1-3 months
+      message: >-
+        Interested in your project. My parents will fund part of it so I need to discuss with them first. Can you
+        share the brochure and carpet area details?
+    expected_output: warm
+    metadata: {why: Funding and the decision depend on parents; only asking for a brochure so far.}
+
+  - name: deepak-nri-singapore
+    inputs:
+      name: Deepak Nair (NRI, Singapore)
+      location: Whitefield, Bengaluru
+      requirement: 2BHK for rental income
+      budget: ₹85-95 lakh
+      timeline: 3-6 months
+      message: >-
+        I'm in Singapore and looking to invest in Whitefield. Will be in Bengaluru in April and can visit then.
+        What's the rental demand near ITPL, and is there a buyback or rental guarantee?
+    expected_output: warm
+    metadata: {why: Clear investor, budget fits, but the earliest visit is months away.}
+
+  - name: pooja-maintenance-and-possession
+    inputs:
+      name: Pooja Reddy
+      location: Gachibowli, Hyderabad
+      requirement: 3BHK
+      budget: ₹1.1 Cr
+      timeline: 1-3 months
+      message: >-
+        Liked the project when I visited, but the maintenance of 6 rupees per sq ft is high and possession in 2027 is
+        late for us. If you have any ready option in the same budget, let me know.
+    expected_output: warm
+    metadata: {why: Visited and has budget, but two objections block a decision.}
+
+  - name: vivek-first-home-emi
+    inputs:
+      name: Vivek Iyer
+      location: Thane, Mumbai
+      requirement: 1BHK, first home
+      budget: ₹55 lakh
+      timeline: 3-6 months
+      message: >-
+        First home for me. Salary is around 50k, not sure how much loan I will get. EMI kitni hogi for 55 lakh? Want
+        to understand before planning a visit.
+    expected_output: warm
+    metadata: {why: Genuine first-time buyer, but financing is unclear and no visit planned yet.}
+
+  - name: harish-comparing-projects
+    inputs:
+      name: Harish Kumar
+      location: Hennur, Bengaluru
+      requirement: 2BHK
+      budget: ₹70-80 lakh
+      timeline: 1-3 months
+      message: >-
+        I am comparing your project with Prestige and Sobha projects nearby. Send your best price and current offers.
+        Will decide in the next couple of months.
+    expected_output: warm
+    metadata: {why: In-market with budget, but price shopping across builders, nothing booked.}
+
+  # ---------------------------------------------------------------- COLD (8)
+  - name: vikram-just-checking
+    inputs:
+      name: Vikram Reddy
+      location: Hyderabad, anywhere good
+      requirement: Flat
+      budget: Not sure
+      timeline: Just exploring
+      message: Just checking prices. Abhi plan nahi hai, maybe next year. Send brochure.
+    expected_output: cold
+    metadata: {why: Browsing, no budget, next year.}
+
+  - name: farhan-impossible-bandra-budget
+    inputs:
+      name: Farhan Shaikh
+      location: Bandra West, Mumbai
+      requirement: 3BHK sea-facing, new building
+      budget: ₹80 lakh
+      timeline: Within 1 month
+      message: Need sea facing 3bhk in Bandra west, max 80 lakh. Ready to move fast if price is right.
+    expected_output: cold
+    metadata: {why: The budget cannot buy what is asked; needs re-qualifying before any sales call.}
+
+  - name: sanjay-collecting-info
+    inputs:
+      name: Sanjay Patil
+      location: Pune, anywhere
+      requirement: Flat
+      budget: Depends
+      timeline: 6+ months
+      message: Just collecting information for next year. Send whatever details you have.
+    expected_output: cold
+    metadata: {why: Vague, no budget, next year.}
+
+  - name: ritu-after-board-exams
+    inputs:
+      name: Ritu Kapoor
+      location: Gurugram
+      requirement: 3BHK
+      budget: ₹1.5 Cr
+      timeline: 6+ months
+      message: We will decide only after the kids' board exams next year. Please send project details for now.
+    expected_output: cold
+    metadata: {why: Explicitly 6+ months away.}
+
+  - name: imran-koramangala-house-50l
+    inputs:
+      name: Imran Pasha
+      location: Koramangala, Bengaluru
+      requirement: Independent house, 3BHK
+      budget: ₹50 lakh
+      timeline: Within 1 month
+      message: Want an independent 3BHK house in Koramangala within 50 lakh. Urgent.
+    expected_output: cold
+    metadata: {why: Urgent, but the budget is far below anything that matches the ask.}
+
+  - name: ankit-wants-to-rent
+    inputs:
+      name: Ankit Jain
+      location: HSR Layout, Bengaluru
+      requirement: 2BHK on rent
+      budget: ₹30,000 per month
+      timeline: Within 1 month
+      message: Looking for a 2BHK on rent in HSR Layout, around 30k per month. Do you have anything?
+    expected_output: cold
+    metadata: {why: Wants to rent, not buy; route elsewhere.}
+
+  - name: mrs-shah-selling
+    inputs:
+      name: Kavita Shah
+      location: Andheri West, Mumbai
+      requirement: Sell my 2BHK
+      budget: Expecting ₹1.4 Cr
+      timeline: 1-3 months
+      message: I want to sell my 2BHK in Andheri West. Can your team find me a buyer? What commission do you charge?
+    expected_output: cold
+    metadata: {why: A seller in the buyer funnel; real person, wrong desk.}
+
+  - name: one-word-price
+    inputs:
+      name: Guest
+      location: Bengaluru
+      requirement: Flat
+      budget: "-"
+      timeline: Just exploring
+      message: Price?
+    expected_output: cold
+    metadata: {why: Too thin to act on; nurture with details.}
+
+  # ---------------------------------------------------------------- JUNK (7)
+  - name: seo-spam
+    inputs:
+      name: test test
+      location: asdf
+      requirement: asdfgh
+      budget: "1"
+      timeline: Just exploring
+      message: >-
+        Hello sir we provide SEO and Google ranking services for your real estate website, first page guaranteed.
+        Call us for a free audit.
+    expected_output: junk
+    metadata: {why: Vendor spam.}
+
+  - name: mahesh-broker-commission
+    inputs:
+      name: Mahesh Kulkarni (Kulkarni Realty)
+      location: Wakad, Pune
+      requirement: Multiple
+      budget: "-"
+      timeline: Just exploring
+      message: >-
+        Namaskar, I am a registered broker with 5-6 clients for 2BHK in Wakad. What is the CP brokerage % on this
+        project and any extra incentive for bookings this month? Please share inventory list and price sheet for my
+        clients.
+    expected_output: junk
+    metadata: {why: Channel partner asking for commission; not a buyer for presales.}
+
+  - name: shree-realty-cp
+    inputs:
+      name: Shree Realty
+      location: Whitefield, Bengaluru
+      requirement: Inventory for clients
+      budget: "-"
+      timeline: Immediately
+      message: We are channel partners. Please share your inventory sheet and brokerage structure. We have buyers.
+    expected_output: junk
+    metadata: {why: Broker fishing for inventory.}
+
+  - name: job-seeker
+    inputs:
+      name: Ravi Teja
+      location: Hyderabad
+      requirement: Job
+      budget: "-"
+      timeline: Immediately
+      message: I am looking for a sales executive job in your company. I have 2 years of experience. Please consider my profile.
+    expected_output: junk
+    metadata: {why: Job applicant, not a buyer.}
+
+  - name: wrong-number-stop-calling
+    inputs:
+      name: Unknown
+      location: Chennai
+      requirement: None
+      budget: "-"
+      timeline: Just exploring
+      message: I never filled any form. Please stop calling and messaging me.
+    expected_output: junk
+    metadata: {why: Did not enquire; do not contact.}
+
+  - name: loan-agent-pitch
+    inputs:
+      name: QuickHome Finance
+      location: Bengaluru
+      requirement: Partnership
+      budget: "-"
+      timeline: Immediately
+      message: We provide home loans at 7.9% interest with fast approval. Partner with us to offer your buyers better rates.
+    expected_output: junk
+    metadata: {why: Vendor pitch.}
+
+  - name: gibberish
+    inputs:
+      name: asd
+      location: qwe
+      requirement: zzz
+      budget: "0"
+      timeline: Just exploring
+      message: asdasd qweqwe lorem ipsum test
+    expected_output: junk
+    metadata: {why: Test entry or bot.}
