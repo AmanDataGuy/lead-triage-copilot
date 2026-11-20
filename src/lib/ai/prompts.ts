@@ -9,7 +9,7 @@
 import type { LeadAnalysis } from "./schema";
 
 // Bump when the prompts change, so cached analyses from older prompts are not reused.
-export const PROMPT_VERSION = "2026-11-21";
+export const PROMPT_VERSION = "2026-11-21.2";
 
 export const ANALYSIS_INSTRUCTIONS = `You are a lead-qualification analyst for an Indian real-estate sales team.
 You read one inbound lead (an intake form, the customer's message, and any notes the salesperson logged after calls)
@@ -72,6 +72,7 @@ export function analysisPrompt(lead: LeadForPrompt): string {
 const CHAT_RULES = `You are a sales copilot helping a real-estate salesperson work ONE specific lead.
 You can see that lead's record and AI analysis below. The person talking to you is the salesperson, not the customer.
 
+- Answer only the salesperson's LATEST message. Earlier turns are context; never repeat or redo an earlier answer.
 - Only help with this lead: call preparation, what to emphasise, handling objections, follow-up timing,
   and drafting or rewriting messages to this customer.
 - Ground every claim in <lead_record> and <analysis>. If asked for something not in them (a price, an available unit,
