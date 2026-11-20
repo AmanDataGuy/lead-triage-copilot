@@ -1,5 +1,5 @@
-# Runs on every push and pull request: lint, typecheck, unit tests, and a secret scan.
-# No AI keys are needed: the AI is replaced by fake models in tests (see tests/analyze.test.ts).
+# Runs on every push and pull request: the Python API's lint and tests, the UI's lint, typecheck and build,
+# and a secret scan. No AI keys are needed: the tests use fake models, and the browser test is skipped.
 name: CI
 
 on:
@@ -7,7 +7,20 @@ on:
   pull_request:
 
 jobs:
-  check:
+  api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest -q
+
+  ui:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,7 +31,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
-      - run: npm test
+      - run: npm run build
 
   secrets:
     runs-on: ubuntu-latest
