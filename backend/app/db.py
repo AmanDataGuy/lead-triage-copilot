@@ -4,7 +4,7 @@
 - workspaces: one per browser (anonymous cookie), so each visitor has a private set of leads.
 - leads: the intake form, the stored AI analysis with its computed score/tier, and Call Loop state.
 - messages: the follow-up chat history. activities: one row per logged call. usage: daily AI call counters.
-- NullPool: on serverless every request opens its own connection through Neon's pooler, so we keep no pool.
+- A small connection pool, reused across requests by warm serverless instances (Neon's pooler sits behind it).
 - Run `uv run python -m app.db` once to create the tables.
 """
 
@@ -15,7 +15,6 @@ from typing import Any
 
 from sqlalchemy import Column, DateTime, ForeignKey, Uuid
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.pool import NullPool
 from sqlmodel import Field, Session, SQLModel, create_engine
 
 
@@ -101,7 +100,13 @@ def _url() -> str:
     return os.environ.get("DATABASE_URL", "").replace("postgresql://", "postgresql+psycopg://", 1)
 
 
-engine = create_engine(_url(), poolclass=NullPool) if os.environ.get("DATABASE_URL") else None
+# A small pool: warm serverless instances are reused, and opening a new TLS connection per query costs ~1 s.
+# pre_ping drops connections Neon closed while the database slept.
+engine = (
+    create_engine(_url(), pool_size=2, max_overflow=3, pool_pre_ping=True, pool_recycle=300)
+    if os.environ.get("DATABASE_URL")
+    else None
+)
 
 
 def get_session():
