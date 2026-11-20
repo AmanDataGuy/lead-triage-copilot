@@ -163,7 +163,7 @@ function QueueBadge({ item, now }: { item: QueueItem<ListLead>; now: Date }) {
   const { bucket, sla, lead } = item;
   if (bucket === "overdue" && sla) {
     return (
-      <Badge className="bg-red-600 text-white">
+      <Badge className={lead.tier === "cold" ? "bg-muted text-muted-foreground" : "bg-red-600 text-white"}>
         <Clock aria-hidden /> waiting {shortDuration(sla.waitingMs)}
       </Badge>
     );
