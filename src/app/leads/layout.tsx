@@ -47,7 +47,7 @@ export default async function LeadsLayout({ children }: { children: React.ReactN
           </p>
         </div>
         <form action={resetDemo} className="ml-auto">
-          <Button variant="ghost" size="sm" type="submit">
+          <Button variant="ghost" size="sm" type="submit" aria-label="Reset demo">
             <RotateCcw aria-hidden /> <span className="hidden sm:inline">Reset demo</span>
           </Button>
         </form>
