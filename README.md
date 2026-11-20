@@ -180,10 +180,10 @@ Tests: `cd backend && uv run pytest` (unit, no keys) · `E2E_BASE_URL=http://loc
 
 ## Deployment
 
-Two Vercel projects from this one repo, both free tier and always on:
-1. **API:** Root Directory `backend` (FastAPI is detected from `pyproject.toml`). Env: `GEMINI_API_KEY`,
-   `GROQ_API_KEY`, `DATABASE_URL`, `CRON_SECRET`. Region Singapore, next to the Neon database.
-2. **UI:** Root Directory `.` (Next.js). Env: `API_URL` = the API project's URL.
+One Vercel project (free tier, always on) using [Vercel Services](https://vercel.com/docs/services): Vercel detects
+both apps in the repo and serves FastAPI (`backend/`) at `/api` and Next.js at `/`, on one URL. Env vars:
+`GEMINI_API_KEY`, `GROQ_API_KEY`, `DATABASE_URL`, `CRON_SECRET`. Functions run in Singapore, next to the Neon database,
+and Vercel Cron calls `/api/cron/cleanup` daily. The Next.js server reaches the API at the project's production URL.
 
 ## Key decisions
 
