@@ -7,7 +7,9 @@
 import "server-only";
 import { cookies, headers } from "next/headers";
 
-export const API_URL = process.env.API_URL ?? "http://127.0.0.1:8000";
+// On Vercel the API is a service of this same project, reachable at the production URL; locally it runs on :8000.
+const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+export const API_URL = process.env.API_URL ?? (vercelUrl ? `https://${vercelUrl}` : "http://127.0.0.1:8000");
 
 export type ApiResult<T> = { ok: boolean; status: number; data: T };
 
