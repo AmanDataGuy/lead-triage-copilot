@@ -1,13 +1,12 @@
 /**
  * # page.tsx (/leads/[id]) - one lead: the AI analysis, the Call tab (own feature) and the follow-up chat
  *
- * - Loads the lead only if it belongs to this browser's workspace; anything else is a 404.
+ * - The API only returns the lead if it belongs to this browser's workspace; anything else is a 404.
  * - Shows an error passed back by createLead (e.g. AI quota) and a Retry button for failed analyses.
  */
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { and, asc, desc, eq } from "drizzle-orm";
-import { z } from "zod";
+import type { UIMessage } from "ai";
 import { ArrowLeft, Trash2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -17,8 +16,8 @@ import { CallTab } from "@/components/call-tab";
 import { ChatPanel } from "@/components/chat-panel";
 import { RetryButton } from "@/components/retry-button";
 import { TierBadge } from "@/components/tier-badge";
-import { activities, db, leads, messages } from "@/lib/db";
-import { getWorkspaceId } from "@/lib/workspace";
+import { api } from "@/lib/api";
+import type { Activity, Lead } from "@/lib/types";
 import { deleteLead } from "@/app/actions";
 
 type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ error?: string }> };
@@ -27,19 +26,12 @@ type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ error?: 
 export default async function LeadPage({ params, searchParams }: Props) {
   const { id } = await params;
   const { error } = await searchParams;
-  if (!z.uuid().safeParse(id).success) notFound();
-
-  const workspaceId = await getWorkspaceId();
-  const [lead] = await db
-    .select()
-    .from(leads)
-    .where(and(eq(leads.id, id), eq(leads.workspaceId, workspaceId)));
-  if (!lead) notFound();
-
-  const [history, chat] = await Promise.all([
-    db.select().from(activities).where(eq(activities.leadId, id)).orderBy(desc(activities.createdAt)),
-    db.select().from(messages).where(eq(messages.leadId, id)).orderBy(asc(messages.createdAt)),
-  ]);
+  const res = await api<{ lead: Lead; activities: Activity[]; messages: UIMessage[] }>(
+    `/api/leads/${encodeURIComponent(id)}`,
+  );
+  if (res.status === 404 || res.status === 422) notFound();
+  if (!res.ok) throw new Error("The lead service is unavailable. Please refresh in a moment.");
+  const { lead, activities, messages } = res.data;
 
   return (
     <main className="min-w-0 flex-1 overflow-y-auto">
@@ -88,14 +80,10 @@ export default async function LeadPage({ params, searchParams }: Props) {
               <AnalysisView lead={lead} analysis={lead.analysis} reasons={lead.reasons ?? []} />
             </TabsContent>
             <TabsContent value="call" className="mt-4">
-              <CallTab leadId={lead.id} phone={lead.phone} analysis={lead.analysis} activities={history} />
+              <CallTab leadId={lead.id} phone={lead.phone} analysis={lead.analysis} activities={activities} />
             </TabsContent>
             <TabsContent value="chat" className="mt-4">
-              <ChatPanel
-                leadId={lead.id}
-                phone={lead.phone}
-                initialMessages={chat.map((m) => ({ id: m.id, role: m.role, parts: m.parts }))}
-              />
+              <ChatPanel leadId={lead.id} phone={lead.phone} initialMessages={messages} />
             </TabsContent>
           </Tabs>
         )}

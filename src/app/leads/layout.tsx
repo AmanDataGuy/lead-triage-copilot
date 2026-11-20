@@ -1,41 +1,21 @@
 /**
  * # layout.tsx (/leads) - the app frame: header, ranked lead list on the left, the open lead on the right
  *
- * - First visit: creates this browser's workspace and fills it with the sample leads.
- * - Loads only the fields the list needs; the open lead's page loads the rest.
+ * - Asks the API for this visitor's leads (the API creates and seeds the workspace on the first visit) and for
+ *   the call queue order, which the API works out with its Call Loop rules.
  */
-import { desc, eq } from "drizzle-orm";
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IntakeSheet } from "@/components/intake-sheet";
-import { LeadList, type ListLead } from "@/components/lead-list";
-import { db, leads } from "@/lib/db";
-import { timelinePoints } from "@/lib/scoring";
-import { ensureWorkspace, getWorkspaceId } from "@/lib/workspace";
+import { LeadList } from "@/components/lead-list";
+import { api } from "@/lib/api";
+import type { ListLead, QueueEntry } from "@/lib/types";
 import { resetDemo } from "@/app/actions";
 
 // Render the header and the lead list around whichever lead is open.
 export default async function LeadsLayout({ children }: { children: React.ReactNode }) {
-  const workspaceId = await getWorkspaceId();
-  await ensureWorkspace(workspaceId);
-  const rows = await db.select().from(leads).where(eq(leads.workspaceId, workspaceId)).orderBy(desc(leads.createdAt));
-
-  const list: ListLead[] = rows.map((l) => ({
-    id: l.id,
-    name: l.name,
-    location: l.location,
-    budget: l.budget,
-    timeline: l.timeline,
-    summary: l.analysis?.summary ?? null,
-    tier: l.tier,
-    score: l.score,
-    timelinePoints: timelinePoints(l.analysis),
-    status: l.status,
-    stage: l.stage,
-    createdAt: l.createdAt,
-    firstContactAt: l.firstContactAt,
-    nextFollowUpAt: l.nextFollowUpAt,
-  }));
+  const res = await api<{ leads: ListLead[]; queue: QueueEntry[] }>("/api/leads");
+  if (!res.ok) throw new Error("The lead service is unavailable. Please refresh in a moment.");
 
   return (
     <div className="flex h-dvh flex-col">
@@ -54,7 +34,7 @@ export default async function LeadsLayout({ children }: { children: React.ReactN
         <IntakeSheet />
       </header>
       <div className="flex min-h-0 flex-1">
-        <LeadList leads={list} />
+        <LeadList leads={res.data.leads} queue={res.data.queue} />
         {children}
       </div>
     </div>
