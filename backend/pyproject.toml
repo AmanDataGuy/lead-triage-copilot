@@ -1,0 +1,32 @@
+# LeadPilot API: the Python backend (FastAPI) that analyses, scores and stores real-estate leads.
+[project]
+name = "leadpilot-api"
+version = "0.1.0"
+description = "AI lead triage API for real-estate sales"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.165.0",
+    "psycopg[binary]>=3.3.9",
+    "pydantic-ai-slim[google,groq]>=2.71.0",
+    "sqlmodel>=0.0.50",
+]
+
+[dependency-groups]
+dev = [
+    "pydantic-evals>=2.71.0",
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.5.0",
+    "ruff>=0.17.6",
+]
+
+# Vercel serves the FastAPI app object found here.
+[tool.vercel]
+entrypoint = "app.main:app"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.ruff]
+line-length = 110
