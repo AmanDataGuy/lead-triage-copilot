@@ -45,6 +45,8 @@ CAPS = [
     ("timeline", "over_6_months", 44),  # not a call-today lead
     ("timeline", "browsing", 44),
     ("intent", "just_checking", 44),  # they say they're only checking
+    ("intent", "specific_questions", 69),  # Hot means asking to act now (visit, price sheet, token)
+    ("intent", "generic", 69),
 ]
 
 MAJOR_OBJECTION_PENALTY = 5
