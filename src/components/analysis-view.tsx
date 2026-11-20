@@ -110,7 +110,8 @@ export function AnalysisView({ lead, analysis, reasons }: { lead: Lead; analysis
         </ul>
         <p className="mt-2 text-xs text-muted-foreground">
           Each major objection takes off 5 points (at most 10). Some answers cap the score: an unrealistic budget,
-          6+ months away or &ldquo;just checking&rdquo; keep a lead Cold; 3-6 months keeps it at most Warm. Spam and
+          6+ months away or &ldquo;just checking&rdquo; keep a lead Cold; 3-6 months, or only asking questions rather than asking to visit or
+          book, keep it at most Warm. Spam and
           broker enquiries score 0. The AI picks each level and quotes its evidence; the points come from a fixed table.
         </p>
       </Details>
