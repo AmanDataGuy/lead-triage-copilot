@@ -55,6 +55,15 @@ describe("orderQueue", () => {
     ]);
   });
 
+  it("never puts a cold lead above a hot one, even when the cold lead's timer has run out", () => {
+    const leads = [
+      lead("cold-overdue", { tier: "cold", score: 30, createdAt: minsAgo(3000) }),
+      lead("hot-fresh", { tier: "hot", score: 90, createdAt: minsAgo(2) }),
+      lead("warm-overdue", { tier: "warm", score: 60, createdAt: minsAgo(120) }),
+    ];
+    expect(orderQueue(leads, now).map((q) => q.lead.id)).toEqual(["hot-fresh", "warm-overdue", "cold-overdue"]);
+  });
+
   it("orders fresh leads by score", () => {
     const leads = [lead("low", { score: 50 }), lead("high", { score: 65 })];
     expect(orderQueue(leads, now).map((q) => q.lead.id)).toEqual(["high", "low"]);
