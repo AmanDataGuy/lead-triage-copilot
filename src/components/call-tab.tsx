@@ -16,8 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ReplyBox } from "@/components/reply-box";
-import type { LeadAnalysis } from "@/lib/ai/schema";
-import type { Activity } from "@/lib/db/schema";
+import type { Activity, LeadAnalysis } from "@/lib/types";
 import { CALL_OUTCOMES, type CallOutcome } from "@/lib/validation";
 import { humanize } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -73,7 +72,7 @@ export function CallTab({ leadId, phone, analysis, activities }: Props) {
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="secondary">{OUTCOME_TEXT[a.outcome as CallOutcome] ?? a.outcome}</Badge>
                   <span className="text-muted-foreground">
-                    {a.createdAt.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}
+                    {new Date(a.createdAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}
                   </span>
                   {a.scoreBefore !== a.scoreAfter && (
                     <span className="ml-auto inline-flex items-center gap-1 font-mono font-semibold tabular-nums">

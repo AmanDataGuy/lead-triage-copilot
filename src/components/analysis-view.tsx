@@ -10,9 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ReplyBox } from "@/components/reply-box";
-import type { LeadAnalysis } from "@/lib/ai/schema";
-import type { Lead } from "@/lib/db";
-import { SIGNAL_LABELS, type Reason } from "@/lib/scoring";
+import { SIGNAL_LABELS, type Lead, type LeadAnalysis, type Reason } from "@/lib/types";
 import { humanize } from "@/lib/format";
 
 export const ACTION_LABEL: Record<LeadAnalysis["nextAction"]["action"], string> = {

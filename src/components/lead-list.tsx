@@ -2,9 +2,8 @@
 /**
  * # lead-list.tsx - the left column: every lead, ranked, in two views
  *
- * - "Call queue": who to call next (overdue new leads, due follow-ups, fresh leads, then scheduled ones), with live
- *   speed-to-lead timers. Rules live in lib/queue.ts.
- * - "All leads": grouped Hot / Warm / Cold / Junk, sorted by score inside each group.
+ * - "Call queue": who to call next, in the order the API's Call Loop rules decided, with live speed-to-lead timers.
+ * - "All leads": grouped Hot / Warm / Cold / Junk; the API already sorts them by score.
  * - On phones the list and a lead's detail are separate screens, so the list hides itself on a lead's page.
  */
 import Link from "next/link";
@@ -15,45 +14,29 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TierBadge } from "@/components/tier-badge";
 import { cn } from "@/lib/utils";
-import { compareLeads, type Tier } from "@/lib/scoring";
-import { orderQueue, type QueueItem } from "@/lib/queue";
 import { shortDuration } from "@/lib/format";
-
-export type ListLead = {
-  id: string;
-  name: string;
-  location: string;
-  budget: string;
-  timeline: string;
-  summary: string | null;
-  tier: Tier | null;
-  score: number | null;
-  timelinePoints: number;
-  status: string;
-  stage: string;
-  createdAt: Date;
-  firstContactAt: Date | null;
-  nextFollowUpAt: Date | null;
-};
+import type { ListLead, QueueEntry, Tier } from "@/lib/types";
 
 const GROUPS: Tier[] = ["hot", "warm", "cold", "junk"];
 
 // Re-render every 30 seconds so the waiting timers stay current.
 function useNow() {
-  const [now, setNow] = useState(() => new Date());
+  const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 30_000);
+    const t = setInterval(() => setNow(Date.now()), 30_000);
     return () => clearInterval(t);
   }, []);
   return now;
 }
 
 // The ranked lead list with its Call queue and All leads tabs.
-export function LeadList({ leads }: { leads: ListLead[] }) {
+export function LeadList({ leads, queue }: { leads: ListLead[]; queue: QueueEntry[] }) {
   const pathname = usePathname();
   const now = useNow();
-  const queue = orderQueue(leads, now);
-  const overdueHot = queue.filter((q) => q.bucket === "overdue" && q.lead.tier === "hot").length;
+  const byId = new Map(leads.map((l) => [l.id, l]));
+  const waitingMs = (l: ListLead) => now - new Date(l.createdAt).getTime();
+  const isOverdue = (q: QueueEntry, l: ListLead) => q.slaMinutes !== null && waitingMs(l) > q.slaMinutes * 60_000;
+  const overdueHot = queue.filter((q) => byId.get(q.id)?.tier === "hot" && isOverdue(q, byId.get(q.id)!)).length;
   const pending = leads.filter((l) => l.status !== "ready");
 
   return (
@@ -78,11 +61,15 @@ export function LeadList({ leads }: { leads: ListLead[] }) {
         <TabsContent value="queue" className="min-h-0 flex-1 overflow-y-auto">
           {queue.length === 0 && <Empty text="Nobody to call right now." />}
           <ul>
-            {queue.map((item) => (
-              <LeadRow key={item.lead.id} lead={item.lead} active={pathname === `/leads/${item.lead.id}`}>
-                <QueueBadge item={item} now={now} />
-              </LeadRow>
-            ))}
+            {queue.map((q) => {
+              const lead = byId.get(q.id);
+              if (!lead) return null;
+              return (
+                <LeadRow key={q.id} lead={lead} active={pathname === `/leads/${q.id}`}>
+                  <QueueBadge entry={q} lead={lead} overdue={isOverdue(q, lead)} waitingMs={waitingMs(lead)} now={now} />
+                </LeadRow>
+              );
+            })}
           </ul>
         </TabsContent>
 
@@ -95,7 +82,7 @@ export function LeadList({ leads }: { leads: ListLead[] }) {
             </Group>
           )}
           {GROUPS.map((tier) => {
-            const group = leads.filter((l) => l.status === "ready" && l.tier === tier).sort(compareLeads);
+            const group = leads.filter((l) => l.status === "ready" && l.tier === tier);
             if (!group.length) return null;
             return (
               <Group key={tier} title={tier} count={group.length} collapsed={tier === "junk"}>
@@ -113,9 +100,19 @@ export function LeadList({ leads }: { leads: ListLead[] }) {
 }
 
 // A titled, optionally collapsed section of the All leads view.
-function Group({ title, count, collapsed, children }: { title: string; count: number; collapsed?: boolean; children: React.ReactNode }) {
+function Group({
+  title,
+  count,
+  collapsed,
+  children,
+}: {
+  title: string;
+  count: number;
+  collapsed?: boolean;
+  children: React.ReactNode;
+}) {
   return (
-    <details open={!collapsed} className="group">
+    <details open={!collapsed}>
       <summary className="cursor-pointer bg-muted/50 px-4 py-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
         {title} ({count})
       </summary>
@@ -124,7 +121,7 @@ function Group({ title, count, collapsed, children }: { title: string; count: nu
   );
 }
 
-// One lead in the list: tier, name, age, one-line summary, and the key facts.
+// One lead in the list: tier, name, one-line summary, and the key facts.
 function LeadRow({ lead, active, children }: { lead: ListLead; active: boolean; children?: React.ReactNode }) {
   return (
     <li>
@@ -159,20 +156,31 @@ function LeadRow({ lead, active, children }: { lead: ListLead; active: boolean; 
 }
 
 // Why a lead is where it is in the call queue: waiting time, follow-up due, or scheduled.
-function QueueBadge({ item, now }: { item: QueueItem<ListLead>; now: Date }) {
-  const { bucket, sla, lead } = item;
-  if (bucket === "overdue" && sla) {
+function QueueBadge({
+  entry,
+  lead,
+  overdue,
+  waitingMs,
+  now,
+}: {
+  entry: QueueEntry;
+  lead: ListLead;
+  overdue: boolean;
+  waitingMs: number;
+  now: number;
+}) {
+  if (entry.slaMinutes !== null && overdue) {
     return (
       <Badge className={lead.tier === "cold" ? "bg-muted text-muted-foreground" : "bg-red-600 text-white"}>
-        <Clock aria-hidden /> waiting {shortDuration(sla.waitingMs)}
+        <Clock aria-hidden /> waiting {shortDuration(waitingMs)}
       </Badge>
     );
   }
-  if (bucket === "new" && sla) {
-    return <span className="text-xs text-muted-foreground">new · {shortDuration(sla.waitingMs)}</span>;
+  if (entry.slaMinutes !== null) {
+    return <span className="text-xs text-muted-foreground">new · {shortDuration(waitingMs)}</span>;
   }
-  if (bucket === "follow_up_due") return <Badge variant="secondary">Follow-up due</Badge>;
-  const inMs = (lead.nextFollowUpAt?.getTime() ?? now.getTime()) - now.getTime();
+  if (entry.bucket === "follow_up_due") return <Badge variant="secondary">Follow-up due</Badge>;
+  const inMs = (lead.nextFollowUpAt ? new Date(lead.nextFollowUpAt).getTime() : now) - now;
   return <span className="text-xs text-muted-foreground">next call in {shortDuration(inMs)}</span>;
 }
 

@@ -2,13 +2,13 @@
 /**
  * # chat-panel.tsx - "Ask AI" about this one lead, streamed as it answers
  *
- * - Sends only the lead id and the new message; the server adds the lead's record (see api/chat/route.ts).
+ * - Sends only the new message; the Python API adds the lead's record (backend/app/main.py).
  * - When the AI writes a message for the customer it starts with "Draft:". Those answers get Copy, WhatsApp and
  *   "Use as reply" buttons, so the salesperson approves every message before it goes anywhere.
  */
 import { useState, useTransition } from "react";
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport, type UIMessage } from "ai";
+import { TextStreamChatTransport, type UIMessage } from "ai";
 import { Check, Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -36,12 +36,13 @@ export function ChatPanel({ leadId, phone, initialMessages }: { leadId: string; 
   const { messages, sendMessage, status, error } = useChat({
     id: leadId,
     messages: initialMessages,
-    transport: new DefaultChatTransport({
-      api: "/api/chat",
-      // Send only what the server needs; it loads the lead and the history itself.
-      prepareSendMessagesRequest: ({ id, messages: all }) => {
+    // The Python API streams the answer as plain text (through the /api rewrite in next.config.ts).
+    transport: new TextStreamChatTransport({
+      api: `/api/leads/${leadId}/chat`,
+      // Send only the new message; the API loads the lead and the history itself.
+      prepareSendMessagesRequest: ({ messages: all }) => {
         const last = all.at(-1)!;
-        return { body: { leadId: id, message: { id: last.id, role: "user", parts: [{ type: "text", text: textOf(last) }] } } };
+        return { body: { id: last.id, text: textOf(last) } };
       },
     }),
     onError: (e) => toast.error(e.message || "Couldn't reach the AI."),
