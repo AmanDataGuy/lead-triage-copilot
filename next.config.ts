@@ -3,7 +3,7 @@
  *
  * - Cache Components stay off: every page shows one visitor's own leads, so there is nothing to cache.
  * - Adds basic security headers to every response.
- * - Forwards /api/* to the Python API (API_URL), so the browser never needs a second origin.
+ * - Locally forwards /api/* to the Python API, so the browser never needs a second origin.
  */
 import type { NextConfig } from "next";
 
@@ -26,8 +26,10 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
-  // The browser calls the Python API on the same origin (so the workspace cookie just works); Next forwards it.
+  // Locally, forward /api/* to the Python dev server so the browser stays on one origin. On Vercel, the project's
+  // Services routing already sends /api/* to the FastAPI service, so no rewrite is needed there.
   async rewrites() {
+    if (process.env.VERCEL) return [];
     return [{ source: "/api/:path*", destination: `${process.env.API_URL ?? "http://127.0.0.1:8000"}/api/:path*` }];
   },
 };
