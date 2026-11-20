@@ -1,9 +1,7 @@
 /**
- * # validation.ts - what a salesperson may submit, checked the same way in the browser and on the server
+ * # validation.ts - the intake form's rules, checked in the browser for instant feedback
  *
- * - LeadInput: the intake form (name, location, requirement, budget, timeline, message, optional phone).
- * - LogCallInput / ChatInput: the other two things a visitor can send.
- * - prefilter(): a free check that rejects gibberish before we spend an AI call on it.
+ * - Mirrors LeadInput in backend/app/schemas.py. The API checks everything again; this just saves a round trip.
  */
 import { z } from "zod";
 
@@ -37,26 +35,3 @@ export type LeadInput = z.infer<typeof LeadInput>;
 
 export const CALL_OUTCOMES = ["no_answer", "connected", "visit_booked", "not_interested"] as const;
 export type CallOutcome = (typeof CALL_OUTCOMES)[number];
-
-export const LogCallInput = z.strictObject({
-  leadId: z.uuid(),
-  outcome: z.enum(CALL_OUTCOMES),
-  note: z.string().trim().max(2000, "Notes are too long (max 2,000 characters)").default(""),
-});
-
-export const ChatInput = z.strictObject({
-  leadId: z.uuid(),
-  message: z.strictObject({
-    id: z.string().min(1).max(100),
-    role: z.literal("user"),
-    parts: z.array(z.strictObject({ type: z.literal("text"), text: z.string().trim().min(1).max(1000) })).length(1),
-  }),
-});
-
-// Reject input that has almost no real words, so obvious junk never costs an AI call.
-export function prefilter(input: Pick<LeadInput, "requirement" | "message" | "location">): string | null {
-  const text = `${input.requirement} ${input.location} ${input.message}`;
-  const words = text.match(/\p{L}{2,}/gu) ?? [];
-  if (words.length < 3) return "Add a few real details about what the customer wants.";
-  return null;
-}
