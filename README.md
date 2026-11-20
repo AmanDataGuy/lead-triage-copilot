@@ -71,7 +71,8 @@ backend/                     Python API (deployed as its own Vercel project)
   app/call_queue.py          call order, speed-to-lead timers, what a call changed
   app/db.py · workspace.py · limits.py     tables, per-browser workspaces with sample leads, daily AI caps
   tests/                     pytest: scoring, call queue, AI wiring with fake models, browser end-to-end
-  evals/run_evals.py         pydantic-evals: quality checks against the real models
+  evals/golden_leads.yaml    32 hand-labelled leads; run_golden.py measures agreement → golden_results.md
+  evals/run_evals.py         pydantic-evals: edge cases, chat grounding (AI judge) and the Call Loop
 src/                         Next.js UI (deployed as a second Vercel project)
   app/leads/                 the list and lead pages; app/actions.ts forwards changes to the API
   components/                lead list, analysis view, call tab, chat panel, intake form (ui/ = shadcn)
@@ -106,7 +107,8 @@ financing, decision-maker) it picks a level from a fixed list and **quotes the w
 | Decision-maker involved | 10 |
 
 Then a few business rules: each major objection takes off 5 points (at most 10); spam and broker enquiries score 0;
-an unrealistic budget, 6+ months away or "just checking" caps the lead at Cold; 3-6 months caps it at Warm.
+an unrealistic budget, 6+ months away or "just checking" caps the lead at Cold; 3-6 months, or only asking questions
+rather than asking to visit or book, caps it at Warm.
 **Tiers:** Hot 70+, Warm 45-69, Cold 20-44, Junk below 20.
 
 Why: the same evidence always gives the same score; every point can be explained to a salesperson ("+15: 'loan
@@ -120,7 +122,27 @@ hot" can't change the arithmetic. It also makes the providers interchangeable: t
 |---|---|---|---|
 | Unit tests | pytest | Scoring rules and tier edges, call queue order and timers, signal diffs, AI wiring with fake models (parsing, schema-repair retry, fallback, all-providers-down, the tag-injection guard) | 21 passed, no keys needed, runs in CI |
 | End-to-end | pytest-playwright | A real browser: list → new lead → log a call → chat draft → use as reply | Passed against the running app |
-| AI evals | pydantic-evals | The real models on tricky inputs (below) | All passing |
+| Golden set | pydantic-evals | 32 everyday leads hand-labelled by tier, each run twice: does the AI + rules agree with a human? | 64/64 exact, 32/32 consistent |
+| Edge-case evals | pydantic-evals | The real models on tricky inputs (below) | All passing |
+
+### Golden set: agreement with a human on everyday leads
+
+[`backend/evals/golden_leads.yaml`](backend/evals/golden_leads.yaml) holds 32 realistic leads (8 Hot, 9 Warm, 8 Cold,
+7 Junk; English, Hinglish and chat transcripts; Bengaluru, Mumbai, Pune, Hyderabad, NCR), each labelled with the tier a
+salesperson should give it and a one-line reason. The labels follow written tier definitions at the top of the file and
+were written **before** the AI saw these leads; they are never edited to match its output.
+
+`uv run --env-file ../.env python -m evals.run_golden` runs every lead twice and writes
+[`golden_results.md`](backend/evals/golden_results.md): exact accuracy, within-one-tier accuracy, consistency, a
+confusion table and every miss with the AI's signal levels.
+
+- **First run: 62/64 (97%).** The one miss was a buyer who only asked for a brochure and still needed his parents'
+  approval, yet scored Hot 71. The AI read him correctly; the rules let "asking questions" add up to Hot. The tier
+  definition says Hot means *asking to act now*, so the rules now cap leads that are only asking questions at Warm.
+- **After that fix: 64/64 (100%) exact, 32/32 leads got the same tier on both runs, median 2.1 s.** The edge-case
+  suites below were re-run after the change and still pass.
+- Read this as "no misses on these 32 leads", not "perfect": the set is small, and the rule was added after the set
+  exposed the gap. Real conversion data from a client would be the next, stronger test.
 
 **Eval results** (`uv run --env-file ../.env python -m evals.run_evals`):
 
@@ -153,7 +175,8 @@ npm run dev                                  # terminal 2: UI on http://localhos
 ```
 
 Tests: `cd backend && uv run pytest` (unit, no keys) · `E2E_BASE_URL=http://localhost:3000 uv run pytest tests/test_e2e.py`
-(browser, first run `uv run playwright install chromium`) · `uv run --env-file ../.env python -m evals.run_evals` (real AI).
+(browser, first run `uv run playwright install chromium`) · `uv run --env-file ../.env python -m evals.run_golden` and
+`python -m evals.run_evals` (real AI).
 
 ## Deployment
 
@@ -211,7 +234,8 @@ Two Vercel projects from this one repo, both free tier and always on:
 How I worked: I gave the requirements and constraints, chose the direction from the options Claude researched (the
 Call Loop as my feature, a simple UI, a Python backend with the Next.js UI kept for display, pydantic-ai and
 pydantic-evals), and reviewed the work as it was built. Mistakes caught along the way: the first scoring rules let a
-lead 6+ months away reach Warm (caught by the eval); the first call queue put an overdue Cold lead above a brand-new
+lead 6+ months away reach Warm (caught by the eval); a buyer who only asked for a brochure scored Hot (caught by the
+golden set); the first call queue put an overdue Cold lead above a brand-new
 Hot one (caught in the browser); the chat re-answered an earlier question until the prompt was tightened; Groq rejected
 an output until strict schema mode was turned on; and opening a new database connection per query made requests slow
 until a small connection pool replaced it.
