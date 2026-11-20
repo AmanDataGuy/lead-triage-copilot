@@ -6,16 +6,9 @@
  * - Both messages are saved when the answer finishes, even if the browser disconnects mid-stream.
  */
 import { and, desc, eq } from "drizzle-orm";
-import {
-  convertToModelMessages,
-  createUIMessageStreamResponse,
-  streamText,
-  toUIMessageStream,
-  type UIMessage,
-} from "ai";
+import { createUIMessageStreamResponse, toUIMessageStream, type UIMessage } from "ai";
 import { db, leads, messages } from "@/lib/db";
-import { allProviderOptions, defaultModels, firstAvailable } from "@/lib/ai/models";
-import { chatInstructions } from "@/lib/ai/prompts";
+import { streamChat } from "@/lib/ai/chat";
 import { consumeAiCall, QuotaError } from "@/lib/limits";
 import { ChatInput } from "@/lib/validation";
 import { getWorkspaceId } from "@/lib/workspace";
@@ -56,16 +49,7 @@ export async function POST(request: Request) {
   const userMessage: UIMessage = { id: message.id, role: "user", parts: message.parts };
   const conversation = [...history, userMessage];
 
-  const result = streamText({
-    model: firstAvailable(defaultModels),
-    providerOptions: allProviderOptions,
-    instructions: chatInstructions(lead, lead.analysis),
-    messages: await convertToModelMessages(conversation),
-    temperature: 0.5,
-    maxOutputTokens: 700,
-    maxRetries: 0,
-    timeout: { totalMs: 30_000 },
-  });
+  const result = await streamChat(lead, conversation);
   // Keep reading the answer even if the browser goes away, so onEnd still saves it.
   void result.consumeStream();
 
