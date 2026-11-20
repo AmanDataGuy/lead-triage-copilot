@@ -64,3 +64,9 @@ def test_tier_boundaries():
         "hot",
         "hot",
     ]
+
+
+def test_hot_means_asking_to_act_not_just_asking_questions():
+    asking = make_analysis({**BEST, "intent": "specific_questions"})
+    assert score_lead(asking)[:2] == (69, "warm")
+    assert score_lead(make_analysis({**BEST, "intent": "generic"}))[1] == "warm"
