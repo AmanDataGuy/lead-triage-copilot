@@ -10,9 +10,6 @@
 import json
 import re
 
-# Bump when the prompts change.
-PROMPT_VERSION = "2026-11-21.3"
-
 ANALYSIS_INSTRUCTIONS = """You are a lead-qualification analyst for an Indian real-estate sales team.
 You read one inbound lead (an intake form, the customer's message, and any notes the salesperson logged after calls)
 and return a structured analysis that a busy salesperson will act on in seconds.

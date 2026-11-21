@@ -7,7 +7,6 @@
 - Word limits are in field descriptions, not max_length: Gemini ignores string limits, so long text is trimmed in code.
 """
 
-from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -215,34 +214,3 @@ class SignalChange(CamelModel):
     from_: str = Field(alias="from")
     to: str
     evidence: str
-
-
-class ListLead(CamelModel):
-    """A lead as shown in the left-hand list."""
-
-    id: str
-    name: str
-    location: str
-    budget: str
-    timeline: str
-    summary: str | None
-    tier: str | None
-    score: int | None
-    status: str
-    stage: str
-    created_at: datetime
-    first_contact_at: datetime | None
-    next_follow_up_at: datetime | None
-
-
-class QueueEntry(CamelModel):
-    """A lead's place in the call queue and why it is there."""
-
-    id: str
-    bucket: Literal["overdue", "follow_up_due", "new", "scheduled"]
-    sla_minutes: int | None
-
-
-class LeadList(CamelModel):
-    leads: list[ListLead]
-    queue: list[QueueEntry]
