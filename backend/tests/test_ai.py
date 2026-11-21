@@ -12,7 +12,7 @@ from pydantic_ai.messages import ModelResponse, TextPart
 from pydantic_ai.models.fallback import FallbackModel
 from pydantic_ai.models.function import AgentInfo, FunctionModel
 
-from app.ai import AI_ERRORS, analyze_lead
+from app.ai import AI_ERRORS, analyze_lead, groq_keys
 from tests.conftest import make_analysis
 
 LEAD = SimpleNamespace(
@@ -77,3 +77,18 @@ async def test_falls_back_to_the_second_provider_when_the_first_is_out_of_quota(
 async def test_raises_an_ai_error_when_every_provider_fails():
     with pytest.raises(AI_ERRORS):
         await analyze_lead(LEAD, FallbackModel(failing(), failing()))
+
+
+def test_groq_keys_are_used_in_order_and_blank_ones_skipped(monkeypatch):
+    for name in [k for k in __import__("os").environ if k.startswith("GROQ_API_KEY")]:
+        monkeypatch.delenv(name)
+    monkeypatch.setenv("GROQ_API_KEY_10", "tenth")
+    monkeypatch.setenv("GROQ_API_KEY_2", "second")
+    monkeypatch.setenv("GROQ_API_KEY", "first")
+    monkeypatch.setenv("GROQ_API_KEY_3", "")
+    assert groq_keys() == ["first", "second", "tenth"]
+
+
+async def test_moves_past_every_exhausted_key_to_one_that_works():
+    _, model = await analyze_lead(LEAD, FallbackModel(failing(), failing(), failing(), replies(GOOD)))
+    assert model == "fake"
