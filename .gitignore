@@ -53,3 +53,6 @@ docs/history/
 __pycache__/
 .pytest_cache/
 .ruff_cache/
+
+# personal study notes
+notes.md
