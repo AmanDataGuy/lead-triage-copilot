@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "dev:api": "cd backend && uv run --env-file ../.env fastapi dev app/main.py --port 8000"
+    "dev:api": "cd ../backend && uv run --env-file ../.env fastapi dev app/main.py --port 8000"
   },
   "dependencies": {
     "@ai-sdk/react": "^4.0.182",
