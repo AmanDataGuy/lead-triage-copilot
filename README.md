@@ -85,7 +85,8 @@ src/                         Next.js UI (deployed as a second Vercel project)
   (strict mode), and the result comes back as a validated Python object. If it still doesn't validate, the agent
   retries once with the error shown to the model.
 - **Models:** **Gemini 3.5 Flash-Lite** first, and pydantic-ai's `FallbackModel` switches to **Groq `openai/gpt-oss-120b`**
-  if Gemini errors or is out of quota. Both are free tier. If both fail, the lead is still saved with a Retry button.
+  if Gemini errors or is out of quota, trying each configured Groq key in turn (`GROQ_API_KEY`, `GROQ_API_KEY_2`, ...)
+  until one answers. All free tier. If every model fails, the lead is still saved with a Retry button.
 - **Chat:** a second agent streams plain text (`run_stream` → `stream_text`), which FastAPI sends as a streaming
   response. The browser sends only the new message; the API loads the lead, its analysis, call notes and the last 12
   messages from the database, so the context can't be tampered with.
