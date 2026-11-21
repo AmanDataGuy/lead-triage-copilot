@@ -243,6 +243,7 @@ Singapore, next to the Neon database, and Vercel Cron calls `/api/cron/cleanup` 
 | Tool | Used for |
 |---|---|
 | Claude Code (Claude Opus) | Researching free-tier providers, current library APIs and the real-estate sales domain; drafting the build plan; writing code, prompts, tests and evals; browser testing |
+| Google Gemini TTS (voice "Orus") + HyperFrames | The demo video's narration is an AI-generated voice reading my script; the video was assembled with HyperFrames from a real screen recording of the live app |
 | _add any other tools you used_ | |
 
 How I worked: I gave the requirements and constraints, chose the direction from the options Claude researched (the
