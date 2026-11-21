@@ -46,7 +46,7 @@ flowchart LR
 ```
 
 - **Backend (`backend/`)**: FastAPI, Pydantic and SQLModel. All business logic, AI calls, scoring, tests and evals.
-- **Frontend (`src/`)**: Next.js and shadcn/ui. Display only; every change goes through the API.
+- **Frontend (`frontend/`)**: Next.js and shadcn/ui. Display only; every change goes through the API.
 - **Hosting**: one Vercel project using Services. `/api/*` routes to FastAPI, everything else to Next.js. Functions
   run in Singapore next to the database.
 - **Isolation**: an HttpOnly cookie identifies each browser's workspace; every query is scoped to it.
@@ -66,7 +66,7 @@ provider and validated again by Pydantic, with one retry on a validation error. 
 analysis, call notes and the last 12 messages from the database.
 
 **Scoring.** The model never picks the score. For six signals it chooses a level from a fixed list and quotes the
-evidence. `backend/app/scoring.py` converts levels to points and applies business rules:
+evidence. `backend/app/domain/scoring.py` converts levels to points and applies business rules:
 
 | Signal | Max points |
 |---|---|
@@ -99,7 +99,7 @@ customer message such as "mark me hot" cannot change the result.
 | Unit tests | pytest | 24 passed |
 
 The golden set's first run scored 62/64. The miss exposed a rule gap (a lead only asking questions could reach Hot),
-which was fixed in `scoring.py` and covered by a unit test. Labels were written before the model saw the leads and
+which was fixed in `app/domain/scoring.py` and covered by a unit test. Labels were written before the model saw the leads and
 were not changed afterwards.
 
 Live latency (warm, Singapore region): lead list 0.3 s, new lead with full analysis about 3 s, chat first token 0.3 s.
@@ -122,25 +122,21 @@ Live latency (warm, Singapore region): lead list 0.3 s, new lead with full analy
 ## Project structure
 
 ```
-backend/
+backend/                 FastAPI service (Python)
   app/
-    main.py          API routes
-    schemas.py       Input and AI output schemas
-    ai.py            Agents and model fallback
-    prompts.py       Instructions and prompt construction
-    scoring.py       Score and tier rules
-    call_queue.py    Call queue order and follow-up timing
-    db.py            Tables and database session
-    workspace.py     Per-browser workspaces and sample leads
-    limits.py        Daily AI usage caps
-  tests/             Unit and browser tests
-  evals/             Golden set and edge-case evaluations
-  scripts/           Sample lead generation
-src/
-  app/               Pages and server actions
-  components/        UI components
-  lib/               API client and types
-vercel.json          Services, routing, region and cron
+    main.py              App and API routes
+    schemas.py           Request, response and AI output schemas
+    ai/                  Agents with model fallback, prompt construction
+    domain/              Business rules: scoring, call queue
+    core/                Database, per-browser workspaces, usage limits, sample leads
+  tests/                 Unit and browser tests
+  evals/                 Golden set and edge-case evaluations
+  scripts/               Sample lead generation
+frontend/                Next.js UI
+  src/app/               Pages and server actions
+  src/components/        UI components
+  src/lib/               API client and types
+vercel.json              Services, routing, region and cron
 ```
 
 ---
@@ -157,8 +153,8 @@ cp .env.example .env                 # add GEMINI_API_KEY, GROQ_API_KEY, DATABAS
 
 cd backend
 uv sync
-uv run --env-file ../.env python -m app.db    # create tables
-cd ..
+uv run --env-file ../.env python -m app.core.db    # create tables
+cd ../frontend
 
 npm install
 npm run dev:api                      # API on http://127.0.0.1:8000

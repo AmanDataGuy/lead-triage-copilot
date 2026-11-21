@@ -21,7 +21,7 @@ Next.js UI, Neon Postgres, Vercel. Free tier end to end.
 
 The model never picks a number. For six signals (timeline, budget fit, buying intent, requirement specificity,
 financing, decision-maker) it chooses a level from a fixed list and **quotes the customer's words** that justify it.
-`backend/app/scoring.py` turns levels into points (max 100) and applies a small table of business rules: spam and
+`backend/app/domain/scoring.py` turns levels into points (max 100) and applies a small table of business rules: spam and
 brokers are Junk, an unrealistic budget or "just browsing" can't rise above Cold, and Hot requires buying within ~3
 months *and* asking to act (visit, price sheet, token).
 
