@@ -3,7 +3,7 @@
 A real-estate salesperson gets hundreds of leads a day. LeadPilot reads each one, tells them **who to call first,
 what the buyer actually wants, and what to say**, and keeps that picture current after every call.
 
-**Live demo:** _add the Vercel URL_ · **Demo video (3 min):** _add the link_
+**Live demo:** https://lead-triage-copilot.vercel.app · **Demo video (3 min):** _add the link_
 
 No sign-up. Each browser gets its own private workspace with 8 sample leads already analysed, so you can explore
 immediately and then add your own. Please use made-up data: this is a public demo on free-tier AI.
@@ -161,6 +161,19 @@ do the job, and only open-ended chat answers need an AI judge. pydantic-evals do
 already uses. RAGAS measures retrieval quality and this app has no retrieval (each lead's full record is in the
 prompt). DeepEval's judge defaults to a paid OpenAI model.
 
+## Live performance
+
+Measured on the live deployment (Vercel Singapore + Neon Singapore, from India), warm:
+
+| Action | Time |
+|---|---|
+| Load the lead list | 0.3 s (API) · 0.4-0.5 s (whole page) |
+| Save a new lead with the full AI analysis | 2.8-3.2 s |
+| Chat answer | first words in 0.3 s, complete in about 1.5 s |
+| First visit after the app has been idle (cold start + creating the workspace) | about 6 s, once |
+
+The browser tests (one per assignment requirement) also pass against the live URL: 6/6.
+
 ## Run it locally
 
 Needs Python 3.13 with [uv](https://docs.astral.sh/uv/), Node 22+, a free [Gemini API key](https://aistudio.google.com/apikey),
@@ -220,7 +233,7 @@ Singapore, next to the Neon database, and Vercel Cron calls `/api/cron/cleanup` 
   keeps the lead.
 - **The scoring weights are reasoned rules of thumb**, based on how Indian real-estate teams qualify leads. They are not
   yet tuned against real conversion data, which would be the first thing to do with a real client.
-- **Analysis runs during the request** (2-3 s). Fine for one lead at a time; bulk import of hundreds of leads would need
+- **Analysis runs during the request** (about 3 s live). Fine for one lead at a time; bulk import of hundreds of leads would need
   a background queue.
 - **Dictation** in the call log uses the browser's speech recognition: Chrome and Edge only, and the audio goes to Google.
 - **No logins, teams or CRM sync.** The demo is single-user by design.
