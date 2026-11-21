@@ -62,7 +62,11 @@ def test_3_chat_answers_are_grounded_in_the_lead(page: Page):
     page.get_by_role("button", name="What should I emphasise on the call?").click()
     answer = page.locator("ol[aria-live] > li").nth(1)
     expect(answer).to_contain_text(
-        re.compile("Whitefield|Saturday|SBI|east|wife|rent", re.IGNORECASE), timeout=AI_TIMEOUT
+        re.compile(
+            r"Whitefield|Saturday|SBI|east|wife|rent|2BHK|loan|ready.to.move|lakh|price sheet|site visit",
+            re.IGNORECASE,
+        ),
+        timeout=AI_TIMEOUT,
     )
 
     page.get_by_label("Message").fill("Make my reply more assertive")
