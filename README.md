@@ -121,7 +121,7 @@ hot" can't change the arithmetic. It also makes the providers interchangeable: t
 | Layer | Tool | What it checks | Result |
 |---|---|---|---|
 | Unit tests | pytest | Scoring rules and tier edges, call queue order and timers, signal diffs, AI wiring with fake models (parsing, schema-repair retry, fallback, all-providers-down, the tag-injection guard) | 21 passed, no keys needed, runs in CI |
-| End-to-end | pytest-playwright | A real browser: list → new lead → log a call → chat draft → use as reply | Passed against the running app |
+| End-to-end | pytest-playwright | One browser test per assignment requirement: intake form, AI analysis (all six outputs), grounded chat, ranked and grouped list, scannable display, and the Call Loop | 6/6 passed against the running app |
 | Golden set | pydantic-evals | 32 everyday leads hand-labelled by tier, each run twice: does the AI + rules agree with a human? | 64/64 exact, 32/32 consistent |
 | Edge-case evals | pydantic-evals | The real models on tricky inputs (below) | All passing |
 
@@ -180,10 +180,11 @@ Tests: `cd backend && uv run pytest` (unit, no keys) · `E2E_BASE_URL=http://loc
 
 ## Deployment
 
-One Vercel project (free tier, always on) using [Vercel Services](https://vercel.com/docs/services): Vercel detects
-both apps in the repo and serves FastAPI (`backend/`) at `/api` and Next.js at `/`, on one URL. Env vars:
-`GEMINI_API_KEY`, `GROQ_API_KEY`, `DATABASE_URL`, `CRON_SECRET`. Functions run in Singapore, next to the Neon database,
-and Vercel Cron calls `/api/cron/cleanup` daily. The Next.js server reaches the API at the project's production URL.
+One Vercel project (free tier, always on) using [Vercel Services](https://vercel.com/docs/services), configured in
+[`vercel.json`](vercel.json): the FastAPI service (`backend/`) receives `/api/*` with its full path, and the Next.js
+service gets everything else, on one URL. The Next.js server reaches the API through a service binding (`BACKEND_URL`,
+injected by Vercel). Env vars: `GEMINI_API_KEY`, `GROQ_API_KEY`, `DATABASE_URL`, `CRON_SECRET`. Functions run in
+Singapore, next to the Neon database, and Vercel Cron calls `/api/cron/cleanup` daily.
 
 ## Key decisions
 
