@@ -3,7 +3,7 @@
 A real-estate salesperson gets hundreds of leads a day. LeadPilot reads each one, tells them **who to call first,
 what the buyer actually wants, and what to say**, and keeps that picture current after every call.
 
-**Live demo:** https://lead-triage-copilot.vercel.app · **Demo video (3 min):** _add the link_
+**Live demo:** https://lead-triage-copilot.vercel.app · **Demo video (3 min):** _add the link_ · **[Technical report](TECHNICAL_REPORT.md)**
 
 No sign-up. Each browser gets its own private workspace with 8 sample leads already analysed, so you can explore
 immediately and then add your own. Please use made-up data: this is a public demo on free-tier AI.
@@ -30,7 +30,7 @@ what they learned usually disappears. The Call Loop closes that loop.
    that calling within 5 minutes instead of 30 made qualifying a lead about 21 times more likely.)
 2. **During: the call brief.** An opening line, three points to stress, the questions still unanswered, and a one-line
    answer to the likely objection. It is written in the same AI call as the analysis, so it costs nothing extra.
-3. **After: Log call.** Pick the outcome and type (or dictate) what happened. The notes are added to the lead and the
+3. **After: Log call.** Pick the outcome and type what happened. The notes are added to the lead and the
    AI re-reads everything: the score, the next step, the follow-up time and the WhatsApp draft all update, and the
    call history shows exactly what changed, e.g. `79 → 95 · Financing: planned → ready ("funds are ready")`.
 
@@ -235,7 +235,6 @@ Singapore, next to the Neon database, and Vercel Cron calls `/api/cron/cleanup` 
   yet tuned against real conversion data, which would be the first thing to do with a real client.
 - **Analysis runs during the request** (about 3 s live). Fine for one lead at a time; bulk import of hundreds of leads would need
   a background queue.
-- **Dictation** in the call log uses the browser's speech recognition: Chrome and Edge only, and the audio goes to Google.
 - **No logins, teams or CRM sync.** The demo is single-user by design.
 - **Free-tier AI providers may use prompts** to improve their services, so the demo asks for made-up data only.
 
