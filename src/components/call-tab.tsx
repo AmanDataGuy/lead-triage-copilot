@@ -4,11 +4,11 @@
  *
  * - Call brief: opener, points to stress, questions to ask, likely objection. It was written in the same AI call as
  *   the analysis, so opening it costs nothing.
- * - Log call: pick an outcome and type (or dictate) what happened. Real conversations are re-analysed, so the
+ * - Log call: pick an outcome and type what happened. Real conversations are re-analysed, so the
  *   score, next step and follow-up draft update; the history shows exactly which signals changed and why.
  */
-import { useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
-import { ArrowRight, Loader2, Mic, MicOff } from "lucide-react";
+import { useState, useTransition } from "react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,6 @@ import { ReplyBox } from "@/components/reply-box";
 import type { Activity, LeadAnalysis } from "@/lib/types";
 import { CALL_OUTCOMES, type CallOutcome } from "@/lib/validation";
 import { humanize } from "@/lib/format";
-import { cn } from "@/lib/utils";
 import { logCall } from "@/app/actions";
 
 const OUTCOME_TEXT: Record<CallOutcome, string> = {
@@ -118,7 +117,6 @@ function LogCallForm({ leadId }: { leadId: string }) {
   const [outcome, setOutcome] = useState<CallOutcome>("connected");
   const [note, setNote] = useState("");
   const [pending, startTransition] = useTransition();
-  const dictation = useDictation((text) => setNote((n) => `${n} ${text}`.trim()));
   const needsAi = outcome === "connected" || outcome === "visit_booked";
 
   const submit = () =>
@@ -153,22 +151,7 @@ function LogCallForm({ leadId }: { leadId: string }) {
           ))}
         </div>
         <div className="grid gap-1.5">
-          <div className="flex items-center">
-            <Label htmlFor="call-note">What happened?</Label>
-            {dictation.supported && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className={cn("ml-auto", dictation.listening && "text-red-600")}
-                onClick={dictation.toggle}
-                aria-pressed={dictation.listening}
-              >
-                {dictation.listening ? <MicOff aria-hidden /> : <Mic aria-hidden />}
-                {dictation.listening ? "Stop" : "Dictate"}
-              </Button>
-            )}
-          </div>
+          <Label htmlFor="call-note">What happened?</Label>
           <Textarea
             id="call-note"
             rows={4}
@@ -190,44 +173,4 @@ function LogCallForm({ leadId }: { leadId: string }) {
       </CardContent>
     </Card>
   );
-}
-
-type Recognition = {
-  lang: string;
-  continuous: boolean;
-  onresult: (e: { results: ArrayLike<ArrayLike<{ transcript: string }>>; resultIndex: number }) => void;
-  onend: () => void;
-  start: () => void;
-  stop: () => void;
-};
-
-const speechCtor = () => {
-  const w = window as unknown as { SpeechRecognition?: new () => Recognition; webkitSpeechRecognition?: new () => Recognition };
-  return w.SpeechRecognition ?? w.webkitSpeechRecognition;
-};
-const noSubscribe = () => () => {};
-
-// Browser speech-to-text (Chrome and Edge only); the button is hidden when the browser doesn't support it.
-function useDictation(onText: (text: string) => void) {
-  const supported = useSyncExternalStore(noSubscribe, () => !!speechCtor(), () => false);
-  const [listening, setListening] = useState(false);
-  const recognition = useRef<Recognition | null>(null);
-  useEffect(() => () => recognition.current?.stop(), []);
-
-  const toggle = () => {
-    if (listening) return recognition.current?.stop();
-    const Ctor = speechCtor();
-    if (!Ctor) return;
-    const r = new Ctor();
-    r.lang = "en-IN";
-    r.continuous = true;
-    r.onresult = (e) => {
-      for (let i = e.resultIndex; i < e.results.length; i++) onText(e.results[i][0].transcript);
-    };
-    r.onend = () => setListening(false);
-    r.start();
-    recognition.current = r;
-    setListening(true);
-  };
-  return { supported, listening, toggle };
 }
