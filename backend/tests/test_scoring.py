@@ -2,7 +2,7 @@
 # test_scoring.py - pins the lead-scoring rules so a weight change is always a deliberate one
 """
 
-from app.scoring import WEIGHTS, score_lead, tier_for
+from app.domain.scoring import WEIGHTS, score_lead, tier_for
 from tests.conftest import BEST, make_analysis
 
 MAJOR = {"concern": "x", "severity": "major", "handling": "y"}

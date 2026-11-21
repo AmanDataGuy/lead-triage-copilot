@@ -12,7 +12,7 @@ from pydantic_ai.messages import ModelResponse, TextPart
 from pydantic_ai.models.fallback import FallbackModel
 from pydantic_ai.models.function import AgentInfo, FunctionModel
 
-from app.ai import AI_ERRORS, analyze_lead, groq_keys
+from app.ai.agents import AI_ERRORS, analyze_lead, groq_keys
 from tests.conftest import make_analysis
 
 LEAD = SimpleNamespace(

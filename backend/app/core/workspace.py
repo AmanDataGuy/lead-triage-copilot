@@ -16,9 +16,9 @@ from fastapi import Cookie, HTTPException
 from sqlalchemy.dialects.postgresql import insert
 from sqlmodel import Session, delete
 
-from app.db import Lead, Workspace
+from app.core.db import Lead, Workspace
+from app.domain.scoring import score_lead
 from app.schemas import LeadAnalysis
-from app.scoring import score_lead
 
 SEED = json.loads((Path(__file__).parent / "seed.json").read_text())
 

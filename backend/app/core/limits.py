@@ -14,7 +14,7 @@ from fastapi import Request
 from sqlalchemy.dialects.postgresql import insert
 from sqlmodel import Session
 
-from app.db import Usage
+from app.core.db import Usage
 
 DAILY_LIMITS = {"ip": 40, "workspace": 40, "global": 350}
 

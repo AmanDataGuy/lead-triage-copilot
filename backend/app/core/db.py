@@ -5,7 +5,7 @@
 - leads: the intake form, the stored AI analysis with its computed score/tier, and Call Loop state.
 - messages: the follow-up chat history. activities: one row per logged call. usage: daily AI call counters.
 - A small connection pool, reused across requests by warm serverless instances (Neon's pooler sits behind it).
-- Run `uv run python -m app.db` once to create the tables.
+- Run `uv run python -m app.core.db` once to create the tables.
 """
 
 import os

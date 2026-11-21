@@ -4,7 +4,7 @@
 
 from datetime import UTC, datetime, timedelta
 
-from app.call_queue import QueueLead, bucket, diff_signals, follow_up_at, order_queue, sla_minutes
+from app.domain.call_queue import QueueLead, bucket, diff_signals, follow_up_at, order_queue, sla_minutes
 from tests.conftest import make_analysis
 
 NOW = datetime(2026, 11, 21, 10, 0, tzinfo=UTC)

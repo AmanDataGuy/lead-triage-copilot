@@ -18,13 +18,20 @@ from fastapi.responses import StreamingResponse
 from pydantic.alias_generators import to_camel
 from sqlmodel import Session, col, delete, select
 
-from app.ai import AI_ERRORS, analyze_lead, stream_chat
-from app.call_queue import NO_ANSWER_RETRY, QueueLead, diff_signals, follow_up_at, order_queue, sla_minutes
-from app.db import Activity, Lead, Message, Usage, Workspace, engine, get_session
-from app.limits import QuotaError, consume_ai_call
+from app.ai.agents import AI_ERRORS, analyze_lead, stream_chat
+from app.core.db import Activity, Lead, Message, Usage, Workspace, engine, get_session
+from app.core.limits import QuotaError, consume_ai_call
+from app.core.workspace import ensure_workspace, reset_workspace, workspace_id
+from app.domain.call_queue import (
+    NO_ANSWER_RETRY,
+    QueueLead,
+    diff_signals,
+    follow_up_at,
+    order_queue,
+    sla_minutes,
+)
+from app.domain.scoring import score_lead, sort_key
 from app.schemas import ChatInput, LeadAnalysis, LeadInput, LogCallInput, ReplyInput
-from app.scoring import score_lead, sort_key
-from app.workspace import ensure_workspace, reset_workspace, workspace_id
 
 app = FastAPI(title="LeadPilot API")
 

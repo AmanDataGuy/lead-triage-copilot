@@ -22,7 +22,7 @@ from pydantic_ai.models.groq import GroqModel, GroqModelSettings
 from pydantic_ai.providers.google import GoogleProvider
 from pydantic_ai.providers.groq import GroqProvider
 
-from app.prompts import ANALYSIS_INSTRUCTIONS, analysis_prompt, chat_instructions
+from app.ai.prompts import ANALYSIS_INSTRUCTIONS, analysis_prompt, chat_instructions
 from app.schemas import LeadAnalysis
 
 PRIMARY_MODEL = "gemini-3.5-flash-lite"

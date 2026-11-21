@@ -10,10 +10,10 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from app.ai import analyze_lead
-from app.scoring import score_lead
+from app.ai.agents import analyze_lead
+from app.domain.scoring import score_lead
 
-SEED_FILE = Path("app/seed.json")
+SEED_FILE = Path("app/core/seed.json")
 
 
 async def main() -> None:

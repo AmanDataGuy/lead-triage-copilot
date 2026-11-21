@@ -8,8 +8,8 @@
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
+from app.domain.scoring import SIGNAL_LABELS
 from app.schemas import LeadAnalysis, SignalChange
-from app.scoring import SIGNAL_LABELS
 
 SLA_MINUTES = {"hot": 5, "warm": 60, "cold": 24 * 60}
 TIER_ORDER = {"hot": 0, "warm": 1, "cold": 2, "junk": 3}

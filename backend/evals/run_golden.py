@@ -20,8 +20,8 @@ from typing import Any
 from pydantic_evals import Dataset
 from pydantic_evals.evaluators import Evaluator, EvaluatorContext
 
-from app.ai import analyze_lead
-from app.scoring import score_lead
+from app.ai.agents import analyze_lead
+from app.domain.scoring import score_lead
 
 RUNS = 2
 TIERS = ["hot", "warm", "cold", "junk"]

@@ -20,12 +20,12 @@ from pydantic_ai.providers.google import GoogleProvider
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import Evaluator, EvaluatorContext, LLMJudge
 
-from app.ai import analyze_lead, stream_chat
-from app.call_queue import diff_signals
+from app.ai.agents import analyze_lead, stream_chat
+from app.domain.call_queue import diff_signals
+from app.domain.scoring import score_lead
 from app.schemas import LeadAnalysis
-from app.scoring import score_lead
 
-SEED = {s["lead"]["name"].split()[0]: s for s in json.loads(Path("app/seed.json").read_text())}
+SEED = {s["lead"]["name"].split()[0]: s for s in json.loads(Path("app/core/seed.json").read_text())}
 
 
 def lead(**over) -> dict:
