@@ -11,7 +11,7 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "DENY" },
-  { key: "Permissions-Policy", value: "camera=(), geolocation=(), microphone=(self)" },
+  { key: "Permissions-Policy", value: "camera=(), geolocation=(), microphone=()" },
 ];
 
 const nextConfig: NextConfig = {
@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
   // Services routing already sends /api/* to the FastAPI service, so no rewrite is needed there.
   async rewrites() {
     if (process.env.VERCEL) return [];
-    return [{ source: "/api/:path*", destination: `${process.env.API_URL ?? "http://127.0.0.1:8000"}/api/:path*` }];
+    return [{ source: "/api/:path*", destination: "http://127.0.0.1:8000/api/:path*" }];
   },
 };
 

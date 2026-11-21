@@ -12,7 +12,7 @@ export type ApiResult<T> = { ok: boolean; status: number; data: T };
 
 // Where the API lives: on Vercel the service binding injects BACKEND_URL at runtime; locally it runs on :8000.
 function apiUrl(): string {
-  return process.env.BACKEND_URL ?? process.env.API_URL ?? "http://127.0.0.1:8000";
+  return process.env.BACKEND_URL ?? "http://127.0.0.1:8000";
 }
 
 // Call the API as this visitor and return the parsed JSON with the status.
