@@ -1,9 +1,15 @@
-# LeadPilot
+<p align="center">
+  <img src="docs/logo.svg" alt="LeadPilot logo" width="96" height="96">
+</p>
+
+<h1 align="center">LeadPilot</h1>
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=fxTPeUtrxvc">Demo video</a> · <a href="TECHNICAL_REPORT.md">Technical report</a>
+</p>
 
 AI lead triage for real-estate sales teams. LeadPilot reads every inbound enquiry, ranks it, explains the score, and
-tells the salesperson what to say next.
-
-**[Live demo](https://lead-triage-copilot.vercel.app)** · **[Demo video](VIDEO_URL)** · **[Technical report](TECHNICAL_REPORT.md)**
+tells the salesperson what to say next. Try it live at [lead-triage-copilot.vercel.app](https://lead-triage-copilot.vercel.app).
 
 ![LeadPilot: ranked lead list and the analysis of a new lead](docs/screenshot.jpg)
 
