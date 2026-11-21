@@ -2,11 +2,13 @@
 # ai.py - the two AI jobs: analyse a lead (typed output) and answer chat questions about it (streamed text)
 
 - Built on pydantic-ai. FallbackModel tries Gemini 3.5 Flash-Lite first and switches to Groq gpt-oss-120b when
-  Gemini errors or is out of quota. If the output breaks the schema, the agent retries once with the error shown.
+  Gemini errors or is out of quota, trying each configured Groq key in order until one answers.
+  If the output breaks the schema, the agent retries once with the error shown.
 - Both providers are free tier. Models are created lazily so tests and imports don't need API keys.
 """
 
 import os
+import re
 from collections.abc import AsyncIterator
 from functools import cache
 
@@ -43,12 +45,20 @@ analysis_agent = Agent(
 chat_agent = Agent(model_settings=SETTINGS | {"temperature": 0.5, "max_tokens": 700, "timeout": 30})
 
 
+def groq_keys() -> list[str]:
+    """Every Groq key set in the environment: GROQ_API_KEY, then GROQ_API_KEY_2, GROQ_API_KEY_3, ... in order."""
+    names = [k for k in os.environ if re.fullmatch(r"GROQ_API_KEY(_\d+)?", k) and os.environ[k]]
+    return [
+        os.environ[k] for k in sorted(names, key=lambda k: int(k.rsplit("_", 1)[1]) if k[-1].isdigit() else 1)
+    ]
+
+
 @cache
 def default_model() -> Model:
-    """Gemini first, Groq if Gemini fails."""
+    """Gemini first; if it fails, each Groq key in turn, so one key running out of quota moves on to the next."""
     gemini = GoogleModel(PRIMARY_MODEL, provider=GoogleProvider(api_key=os.environ["GEMINI_API_KEY"]))
-    groq = GroqModel(FALLBACK_MODEL, provider=GroqProvider(api_key=os.environ["GROQ_API_KEY"]))
-    return FallbackModel(gemini, groq)
+    groq = [GroqModel(FALLBACK_MODEL, provider=GroqProvider(api_key=key)) for key in groq_keys()]
+    return FallbackModel(gemini, *groq)
 
 
 def _clip(text: str, limit: int) -> str:
