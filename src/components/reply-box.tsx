@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 // Build a wa.me link; 10-digit Indian numbers get the +91 country code added.
-export function whatsappLink(phone: string, text: string): string | null {
+function whatsappLink(phone: string, text: string): string | null {
   const digits = phone.replace(/\D/g, "");
   if (digits.length < 10) return null;
   const full = digits.length === 10 ? `91${digits}` : digits;

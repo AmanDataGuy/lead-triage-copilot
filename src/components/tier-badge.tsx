@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { Tier } from "@/lib/types";
 
-export const TIER_STYLE: Record<Tier, { label: string; Icon: typeof Flame; className: string }> = {
+const TIER_STYLE: Record<Tier, { label: string; Icon: typeof Flame; className: string }> = {
   hot: { label: "Hot", Icon: Flame, className: "border-red-200 bg-red-50 text-red-800" },
   warm: { label: "Warm", Icon: Sun, className: "border-amber-200 bg-amber-50 text-amber-900" },
   cold: { label: "Cold", Icon: Snowflake, className: "border-sky-200 bg-sky-50 text-sky-900" },

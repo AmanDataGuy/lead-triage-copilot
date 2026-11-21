@@ -13,7 +13,7 @@ import { ReplyBox } from "@/components/reply-box";
 import { SIGNAL_LABELS, type Lead, type LeadAnalysis, type Reason } from "@/lib/types";
 import { humanize } from "@/lib/format";
 
-export const ACTION_LABEL: Record<LeadAnalysis["nextAction"]["action"], string> = {
+const ACTION_LABEL: Record<LeadAnalysis["nextAction"]["action"], string> = {
   call_now: "Call now",
   book_site_visit: "Book a site visit",
   send_details: "Send details",

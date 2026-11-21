@@ -49,7 +49,7 @@ export type Lead = {
   stage: string;
 };
 
-export type SignalChange = { signal: string; from: string; to: string; evidence: string };
+type SignalChange = { signal: string; from: string; to: string; evidence: string };
 
 export type Activity = {
   id: string;
